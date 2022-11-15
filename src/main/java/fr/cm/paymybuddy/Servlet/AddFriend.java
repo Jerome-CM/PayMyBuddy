@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 
-@WebServlet("/AddFriend")
+@WebServlet("/addFriend")
 public class AddFriend extends HttpServlet {
 	private static final long serialVersionUID = 1L;
    
@@ -18,7 +18,7 @@ public class AddFriend extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		this.getServletContext().getRequestDispatcher("/WEB-INF/test.jsp").forward(request, response);
+    	this.getServletContext().getRequestDispatcher("/WEB-INF/jsp/addFriend.jsp").forward(request, response);
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

@@ -1,0 +1,53 @@
+@charset "UTF-8";
+@font-face {
+  font-family: "";
+  src: url("/CSS/Roboto/"); }
+
+html{
+	margin:0;
+	padding:0;
+	
+}
+
+.form_container{
+	width:30%;
+	margin:0 auto;
+	text-align:center;
+	border:1px solid black;
+	border-radius:10px;
+}
+
+h1{
+	width:30%;
+	margin: 20px auto;
+	font-size:25px;
+	color:white;
+	padding:7px;
+	background: linear-gradient(to right, #5AAD4F, #86B93C);
+	border-radius:5px;
+}
+
+input{
+	width:80%;
+	border-radius:5px;
+	border:1px solid black;
+	padding: 15px 3px;
+	margin: 20px auto;
+}
+
+.remember{
+	display:flex;
+	justify-content:center;
+	width:100%;
+	text-align:center;
+}
+
+.submit{
+	width:30%;
+	padding:7px;
+	font-size:22px;
+	background-color:#0071D0;
+	color:white;
+	border:none;
+}
+

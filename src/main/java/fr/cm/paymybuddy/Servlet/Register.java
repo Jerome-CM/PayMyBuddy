@@ -7,7 +7,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-@WebServlet("/Register")
+@WebServlet("/register")
 public class Register extends HttpServlet {
 	private static final long serialVersionUID = 1L;
       
@@ -18,7 +18,7 @@ public class Register extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		this.getServletContext().getRequestDispatcher("/WEB-INF/test.jsp").forward(request, response);
+    	this.getServletContext().getRequestDispatcher("/WEB-INF/jsp/finalRegister.jsp").forward(request, response);
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

@@ -7,6 +7,6 @@
 <title>Insert title here</title>
 </head>
 <body>
-<p>Bonjour Test</p>
+<p>JSP addFriend</p>
 </body>
 </html>
