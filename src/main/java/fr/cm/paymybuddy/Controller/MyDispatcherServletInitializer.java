@@ -1,5 +1,6 @@
 package fr.cm.paymybuddy.Controller;
 
+import fr.cm.paymybuddy.Config.JSPViewResolver;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
 public class MyDispatcherServletInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
@@ -12,7 +13,7 @@ public class MyDispatcherServletInitializer extends AbstractAnnotationConfigDisp
 
 	@Override
 	protected Class<?>[] getServletConfigClasses() {
-		return new Class[] { DemoAppConfig.class };
+		return new Class[] { JSPViewResolver.class };
 	}
 
 	@Override

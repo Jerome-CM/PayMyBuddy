@@ -1,9 +1,9 @@
-<%@ include file="include/header.jsp" %>
+<%@ include file="../include/header.jsp" %>
         <title>Add a friend</title>
     </head>
     <body>
     
-    <%@ include file="include/menu.jsp" %>
+    <%@ include file="../include/menu.jsp" %>
 
 	<section class="money">
 			<div>

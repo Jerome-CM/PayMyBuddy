@@ -8,8 +8,6 @@ import fr.cm.paymybuddy.DTO.UserDTO;
 
 public interface AccesServiceInt {
 
-    public void register (HttpServletRequest request);
-
     public String login(HttpServletRequest request);
 
     public boolean logout(HttpServletRequest request);

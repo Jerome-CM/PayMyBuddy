@@ -1,7 +1,6 @@
 package fr.cm.paymybuddy.Service.Implementation;
 
-import fr.cm.paymybuddy.Controller.DemoController;
-import fr.cm.paymybuddy.DTO.UserDTO;
+import fr.cm.paymybuddy.Controller.JSPDispatcher;
 import fr.cm.paymybuddy.Model.User;
 import fr.cm.paymybuddy.Repository.UserRepository;
 import fr.cm.paymybuddy.Service.Interface.AccesServiceInt;
@@ -13,9 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.util.Date;
 
 @Service
@@ -29,14 +26,10 @@ public class AccessService implements AccesServiceInt {
 	private ModelMapper modelMapper;
 
 	@Autowired
-	DemoController controller;
+	JSPDispatcher controller;
 
 	@Autowired
 	PasswordEncoder passwordEncoder;
-    @Override
-    public void register(HttpServletRequest request) {
-
-    }
 
     @Override
     public String login(HttpServletRequest request) {
@@ -66,6 +59,9 @@ public class AccessService implements AccesServiceInt {
 
     @Override
     public boolean logout(HttpServletRequest request) {
-        return false;
+
+		//TODO Kill session, redirect to home
+
+		return false;
     }
 }
