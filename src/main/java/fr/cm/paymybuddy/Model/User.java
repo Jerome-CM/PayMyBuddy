@@ -12,13 +12,13 @@ public class User extends Model{
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private long id;
 
-    private String firstname;
-    private String lastname;
+    private String firstname = "Not set";
+    private String lastname = "Not set";
     private String mail;
     private String password;
 
     @Column(name="account_balance")
-    private double accountBalance;
+    private double accountBalance = 0.00;
 
 
 }

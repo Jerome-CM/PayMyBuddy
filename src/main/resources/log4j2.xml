@@ -11,8 +11,8 @@
 			<PatternLayout pattern="${LOG_PATTERN}"/>
 		</Console>
 		<!-- Ecriture fichier -->
-		<RollingFile name="FileAppender" fileName="src/main/resources/Logs.log"
-					 filePattern="src/main/resources/Logs.log">
+		<RollingFile name="FileAppender" fileName="src/main/resources/Logs/Logs.log"
+					 filePattern="src/main/resources/Logs/Logs.log">
 			<PatternLayout>
 				<Pattern>${LOG_PATTERN}</Pattern>
 			</PatternLayout>

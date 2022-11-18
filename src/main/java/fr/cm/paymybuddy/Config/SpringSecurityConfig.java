@@ -28,14 +28,18 @@ public class SpringSecurityConfig {
         http.authorizeHttpRequests((authz) -> {
 			try {
 				authz
-				// definis un role
+				// autorise l'url si on a le bon rôle
 		    		.antMatchers("/admin").hasRole("ADMIN")
 					.antMatchers("/user").hasRole("USER")
 				// toutes les requêtes http doivent être authentifiées
 					.anyRequest().authenticated()
 					.and()
 				// Demande une page de formulaire, en précisant laquelle
-					.formLogin().loginPage("/login").defaultSuccessUrl("/home").failureUrl("/login?error=true").permitAll();
+					.formLogin().loginPage("/login").defaultSuccessUrl("/home").failureUrl("/login?error=true")
+					.loginProcessingUrl("/loginFormControl")
+					.usernameParameter("mail")
+					.passwordParameter("password").permitAll()
+					.and().rememberMe();
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -48,7 +52,7 @@ public class SpringSecurityConfig {
  	// ignore l'authentification sur ces Urls
  	@Bean
  	  public WebSecurityCustomizer webSecurityCustomizer() {
- 	    return (web) -> web.ignoring().antMatchers("/js/**", "/images/**"); 
+ 	    return (web) -> web.ignoring().antMatchers("/js/**", "/images/**", "/**"); 
  	  }
  	
  	// Exploite un UserDetailsService(DAO) afin de rechercher le nom d'utilisateur, le mot de passe et l'adresse GrantedAuthoritys

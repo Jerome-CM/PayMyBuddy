@@ -15,7 +15,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 @SpringBootApplication
 @EnableSwagger2
-public class PaymybuddyApplication implements CommandLineRunner {
+public class PaymybuddyApplication implements CommandLineRunner { 
 
 	private static final Logger logger = LogManager.getLogger(PaymybuddyApplication.class);
 	
@@ -29,10 +29,6 @@ public class PaymybuddyApplication implements CommandLineRunner {
 	@Bean
 	public UserDetailsService userDetailsService(PasswordEncoder passwordEncoder) {
 	    InMemoryUserDetailsManager manager = new InMemoryUserDetailsManager();
-	    manager.createUser(User.withUsername("user")
-	      .password(passwordEncoder.encode("userPass"))
-	      .roles("USER")
-	      .build());
 	    manager.createUser(User.withUsername("admin")
 	      .password(passwordEncoder.encode("adminPass"))
 	      .roles("USER", "ADMIN")
@@ -40,17 +36,18 @@ public class PaymybuddyApplication implements CommandLineRunner {
 	    return manager;
 	}
 	
-	public static void main(String[] args) {
+	public static void main(String[] args){
 		SpringApplication.run(PaymybuddyApplication.class, args);
 	}
 	
-	@Override
-	public void run(String... args) throws Exception {
-
-		logger.trace("#-#-#-#-#-#-#--- APPLICATION READY ---#-#-#-#-#-#-#");
-
-	}
-
+	
+	  @Override
+	  public void run(String... args) throws Exception {
+	  
+		  logger.trace("#-#-#-#-#-#-#--- APPLICATION READY ---#-#-#-#-#-#-#");
+	  
+	  }
+	 
 
 
 }

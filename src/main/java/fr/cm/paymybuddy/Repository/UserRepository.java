@@ -10,6 +10,6 @@ import java.util.List;
 @Repository
 public interface UserRepository extends CrudRepository <User,Long> {
 
-
+    public List<User> findByMail(String mail);
 
 }
