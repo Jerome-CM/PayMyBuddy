@@ -5,9 +5,7 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-public class ProfilDTO {
+public class ProfilDTO extends UserDTO{
 
-    private String mail;
-    private double accountBalance;
     private List<FriendDTO> listFriends;
 }

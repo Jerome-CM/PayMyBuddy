@@ -10,6 +10,5 @@ public class FriendDTO {
     private String firstname;
     private String lastname;
     private String mail;
-    private String password;
     
 }
