@@ -44,23 +44,6 @@ public class Utility {
         }
     }
 
-    public boolean isUserExist(String mail){
-
-        User user = userRepository.findByMail(mail);
-        logger.info("user finded : {}", user);
-        if(user == null){
-            return false;
-        } else {
-             return true;
-        }
-    }
-
-    public long idUser(String mail){
-
-        long id = userRepository.findByMail(mail).getId();
-
-        return id;
-    }
 
     public static double stringCommaToDoublePoint(String amount){
 
