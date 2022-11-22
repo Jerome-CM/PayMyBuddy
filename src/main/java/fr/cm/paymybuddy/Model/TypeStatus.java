@@ -4,5 +4,6 @@ public enum TypeStatus {
 
     Accepted,
     Refused,
-    Waiting
+    Waiting,
+    Cancel
 }

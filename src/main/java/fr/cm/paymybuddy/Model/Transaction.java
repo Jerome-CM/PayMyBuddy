@@ -17,11 +17,12 @@ public class Transaction extends Model{
 
     private String description;
 
-    @Column(name="id_user")
-    private long myId;
+    @JoinColumn(name = "user", nullable = false)
+    @ManyToOne
+    private User user;
 
-    @Column(name="id_friend")
-    private long idFriend;
+    @ManyToOne
+    private User userFriend;
 
     @Column(name="type_transaction")
     private TypeTransaction typeTransaction;
@@ -33,5 +34,7 @@ public class Transaction extends Model{
 
     @Column(name="sold_after_transaction")
     private double soldAfterTransaction;
+
+
 
 }
