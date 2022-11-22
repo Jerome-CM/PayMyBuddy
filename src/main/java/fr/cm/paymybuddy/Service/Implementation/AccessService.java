@@ -11,8 +11,10 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.servlet.view.RedirectView;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.Date;
 
 @Service
@@ -21,47 +23,54 @@ public class AccessService implements AccesServiceInt {
 	private static final Logger logger = LogManager.getLogger(AccessService.class);
 	@Autowired
 	private UserRepository userRepository;
-	
-	@Autowired
-	private ModelMapper modelMapper;
-
-	@Autowired
-	JSPDispatcher controller;
 
 	@Autowired
 	PasswordEncoder passwordEncoder;
 
+	@Autowired
+	Utility utility;
+
     @Override
-    public String login(HttpServletRequest request) {
+    public RedirectView login(HttpServletRequest request) {
 
 		String mail = request.getParameter("mail");
 		String mdp = request.getParameter("password");
 
 		logger.info("Data from login - mail : {} password : {}", mail, mdp );
-		User user = new User();
-		user.setMail(mail);
-		user.setDateCreation(new Date());
-		user.setPassword(passwordEncoder.encode(mdp));
 
 		try{
-			if(Utility.isUserExist(userRepository.findByMail(user.getMail()))){
-				userRepository.save(user);
-				return "";//TODO la jsp home.jsp
+			if(utility.isUserExist((mail))){
+
+				HttpSession session = request.getSession();
+				session.setAttribute("mail", mail);
+
+				return new RedirectView("/transfert");
 			} else {
-                return "";//TODO la jsp login avec l'erreur en paramètre GET
+				User user = new User();
+				user.setMail(mail);
+				user.setDateCreation(new Date());
+				user.setPassword(passwordEncoder.encode(mdp));
+
+				userRepository.save(user);
+
+				HttpSession session = request.getSession();
+				session.setAttribute("mail", mail);
+
+				return new RedirectView("/register");
             }
 		} catch(Exception e){
 			logger.error("Impossible to save a new user : {}", e.getMessage());
-            return "Error : " + e.getMessage();
+			return new RedirectView("/login?error=reload");
 		}
 
     }
 
     @Override
-    public boolean logout(HttpServletRequest request) {
+    public RedirectView logout(HttpServletRequest request) {
 
-		//TODO Kill session, redirect to home
+		HttpSession session = request.getSession();
+		session.invalidate();
 
-		return false;
+		return new RedirectView("/home?status=disconnected");
     }
 }

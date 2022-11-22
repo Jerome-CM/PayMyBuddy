@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.view.RedirectView;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -15,12 +16,12 @@ public class Connexion {
     AccesServiceInt accesService;
 
     @PostMapping("/loginFormControl")
-    public String loginUser(HttpServletRequest request){
+    public RedirectView loginUser(HttpServletRequest request){
        return accesService.login(request);
     }
 
     @GetMapping("/logout")
-    public boolean logoutUser(HttpServletRequest request){
+    public  RedirectView logoutUser(HttpServletRequest request){
         return accesService.logout(request);
     }
 

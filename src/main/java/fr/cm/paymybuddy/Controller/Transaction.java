@@ -4,6 +4,7 @@ import fr.cm.paymybuddy.Service.Interface.TransactionServiceInt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.view.RedirectView;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -14,12 +15,12 @@ public class Transaction {
     TransactionServiceInt transactionService;
 
     @PostMapping("/refundMyAccount")
-    public boolean refundAccount(HttpServletRequest request){
+    public RedirectView refundAccount(HttpServletRequest request){
         return transactionService.refundAccount(request);
     }
 
     @PostMapping("/sendMoney")
-    public boolean sendMoney(HttpServletRequest request){
+    public RedirectView sendMoney(HttpServletRequest request){
         return transactionService.sendMoney(request);
     }
 }
