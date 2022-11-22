@@ -66,8 +66,8 @@ public class TransactionService implements TransactionServiceInt {
 
         t.setAmount(amount);
         t.setDescription(description);
-        t.setMyId(userRepository.findByMail(mail).getId());
-        t.setIdFriend(userRepository.findByMail(mail).getId());
+        t.setUser(userRepository.findByMail(mail));
+        t.setUserFriend(userRepository.findByMail(mail));
         t.setTypeTransaction(TypeTransaction.Refund);
         t.setStatus(TypeStatus.Accepted);
         t.setSoldBeforeTransaction(userBalanceBefore);

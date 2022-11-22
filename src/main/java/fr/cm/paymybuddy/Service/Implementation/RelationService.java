@@ -3,6 +3,7 @@ package fr.cm.paymybuddy.Service.Implementation;
 import fr.cm.paymybuddy.DTO.FriendDTO;
 import fr.cm.paymybuddy.Model.User;
 import fr.cm.paymybuddy.Repository.UserRepository;
+import fr.cm.paymybuddy.Service.Interface.AccesServiceInt;
 import fr.cm.paymybuddy.Service.Interface.RelationServiceInt;
 import fr.cm.paymybuddy.Utility.Utility;
 import org.apache.logging.log4j.LogManager;
@@ -27,7 +28,7 @@ public class RelationService implements RelationServiceInt {
     UserRepository userRepository;
 
     @Autowired
-    Utility utility;
+    AccesServiceInt accesService;
 
     @Override
     public RedirectView register(HttpServletRequest request) {
@@ -45,7 +46,7 @@ public class RelationService implements RelationServiceInt {
             user.setFirstname(firstname);
             user.setLastname(lastname);
             user.setDateModification(new Date());
-            user.setId(utility.idUser(mail));
+            user.setId(accesService.idUser(mail));
 
             try{
                 userRepository.save(user);
@@ -100,7 +101,7 @@ public class RelationService implements RelationServiceInt {
     @Override
     public RedirectView addFriend(HttpServletRequest request) {
 
-        long myId = Long.parseLong(request.getParameter("myId"));
+        /*long myId = Long.parseLong(request.getParameter("myId"));
         User userFriend = userRepository.findByMail(request.getParameter("mail"));
 
         logger.info("Friend finded with {} : {}", request.getParameter("mail"), userFriend);
@@ -113,7 +114,8 @@ public class RelationService implements RelationServiceInt {
         } catch (Exception e) {
             logger.error("Error : {}", e.getMessage());
             return new RedirectView("/addFriend?status=error");
-        }
+        }*/
+        return new RedirectView("/addFriend?status=error");
     }
 
     @Override

@@ -39,7 +39,7 @@ public class AccessService implements AccesServiceInt {
 		logger.info("Data from login - mail : {} password : {}", mail, mdp );
 
 		try{
-			if(utility.isUserExist((mail))){
+			if(isUserExist((mail))){
 
 				HttpSession session = request.getSession();
 				session.setAttribute("mail", mail);
@@ -62,7 +62,6 @@ public class AccessService implements AccesServiceInt {
 			logger.error("Impossible to save a new user : {}", e.getMessage());
 			return new RedirectView("/login?error=reload");
 		}
-
     }
 
     @Override
@@ -73,4 +72,22 @@ public class AccessService implements AccesServiceInt {
 
 		return new RedirectView("/home?status=disconnected");
     }
+
+	public boolean isUserExist(String mail){
+
+		User user = userRepository.findByMail(mail);
+		logger.info("user finded : {}", user);
+		if(user == null){
+			return false;
+		} else {
+			return true;
+		}
+	}
+
+	public long idUser(String mail){
+
+		long id = userRepository.findByMail(mail).getId();
+
+		return id;
+	}
 }
