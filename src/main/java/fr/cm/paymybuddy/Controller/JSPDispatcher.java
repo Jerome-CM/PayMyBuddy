@@ -28,7 +28,19 @@ public class JSPDispatcher {
 	}
 
 	@GetMapping("/login")
-	public String getLogin() {
+	public String getLogin(HttpServletRequest request, ModelMap map) {
+
+		if(request.getParameter("status") != null) {
+			String statusType = request.getParameter("status");
+
+			if (statusType.equals("errorPassEmpty")) {
+				HttpSession session = request.getSession();
+				session.setAttribute("error", "Your password is empty");
+			} else if (statusType.equals("errorMailEmpty")) {
+				HttpSession session = request.getSession();
+				session.setAttribute("error", "Your mail is empty");
+			}
+		}
 		return "login";
 	}
 

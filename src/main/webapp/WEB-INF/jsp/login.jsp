@@ -6,6 +6,7 @@
 	    <div class="form_container">
 	    
 		    <h1 class="h1_form">Pay My Buddy</h1>
+			<c:out value="${!empty sessionScope.error ? sessionScope.error : ''}"/>
 		    <form action="/loginFormControl" method="post">
 		    	<input type="email" name="mail" placeholder="Identifiant">
 		    	<input type="password" name="password" placeholder="Mot de passe">
@@ -14,4 +15,6 @@
 		    </form>
 	    </div>
     </body>
+
+<% session.removeAttribute("error"); %>
 </html>

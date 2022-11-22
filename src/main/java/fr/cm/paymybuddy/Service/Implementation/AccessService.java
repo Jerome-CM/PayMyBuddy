@@ -46,17 +46,23 @@ public class AccessService implements AccesServiceInt {
 
 				return new RedirectView("/transfert");
 			} else {
-				User user = new User();
-				user.setMail(mail);
-				user.setDateCreation(new Date());
-				user.setPassword(passwordEncoder.encode(mdp));
+				if (mdp.isEmpty()) {
+					return new RedirectView("/login?status=errorPassEmpty");
+				} else if (mail.isEmpty()) {
+					return new RedirectView("/login?status=errorMailEmpty");
+				}else {
 
-				userRepository.save(user);
+					User user = new User();
+					user.setMail(mail);
+					user.setPassword(passwordEncoder.encode(mdp));
 
-				HttpSession session = request.getSession();
-				session.setAttribute("mail", mail);
+					userRepository.save(user);
 
-				return new RedirectView("/register");
+					HttpSession session = request.getSession();
+					session.setAttribute("mail", mail);
+
+					return new RedirectView("/register");
+				}
             }
 		} catch(Exception e){
 			logger.error("Impossible to save a new user : {}", e.getMessage());
