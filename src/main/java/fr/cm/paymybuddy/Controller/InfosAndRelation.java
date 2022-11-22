@@ -1,5 +1,6 @@
 package fr.cm.paymybuddy.Controller;
 
+import fr.cm.paymybuddy.Service.Interface.AccesServiceInt;
 import fr.cm.paymybuddy.Service.Interface.RelationServiceInt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -11,8 +12,11 @@ import javax.servlet.http.HttpServletRequest;
 @RestController
 public class InfosAndRelation {
 
-    @Autowired
-    RelationServiceInt relationService;
+    private RelationServiceInt relationService;
+
+    public InfosAndRelation(RelationServiceInt relationService){
+        this.relationService = relationService;
+    }
 
     @PostMapping("/completeInfosUser")
     public RedirectView registerUser(HttpServletRequest request){

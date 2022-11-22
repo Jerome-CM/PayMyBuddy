@@ -12,8 +12,11 @@ import javax.servlet.http.HttpServletRequest;
 @RestController
 public class Connexion {
 
-    @Autowired
-    AccesServiceInt accesService;
+    private AccesServiceInt accesService;
+
+    public Connexion(AccesServiceInt accesService){
+        this.accesService = accesService;
+    }
 
     @PostMapping("/loginFormControl")
     public RedirectView loginUser(HttpServletRequest request){

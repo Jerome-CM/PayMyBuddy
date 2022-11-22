@@ -11,8 +11,11 @@ import javax.servlet.http.HttpServletRequest;
 @RestController
 public class Transaction {
 
-    @Autowired
-    TransactionServiceInt transactionService;
+    private TransactionServiceInt transactionService;
+
+    public Transaction(TransactionServiceInt transactionService) {
+        this.transactionService = transactionService;
+    }
 
     @PostMapping("/refundMyAccount")
     public RedirectView refundAccount(HttpServletRequest request){

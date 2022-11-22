@@ -18,11 +18,14 @@ import java.util.List;
 @Controller
 public class JSPDispatcher {
 
-	@Autowired
-	UserRepository userRepository;
+	private UserRepository userRepository;
 
-	@Autowired
-	TransactionServiceInt transactionService;
+	private TransactionServiceInt transactionService;
+
+	public JSPDispatcher(UserRepository userRepository, TransactionServiceInt transactionService) {
+		this.userRepository = userRepository;
+		this.transactionService = transactionService;
+	}
 
 	@GetMapping("/login")
 	public String getLogin() {
