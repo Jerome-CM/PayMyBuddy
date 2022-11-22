@@ -10,7 +10,7 @@
 				<h2>Send a message</h2>
 			</div>
 			<div class="control_money contact">
-
+				<c:out value="${status}"/>
 			</div>
 	</section>
 	</body>

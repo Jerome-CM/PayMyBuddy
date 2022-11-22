@@ -1,3 +1,4 @@
+
 <%@ include file="../include/header.jsp" %>
         <title>dashboard</title>
     </head>
@@ -8,7 +9,7 @@
 	<section class="money">
 			<div class="header_money">
 				<h2>Send Money</h2>
-				<a class="btn" href="/testJEE/dashboard">Add Connection</a>
+				<a class="btn" href="/addFriend">Add Connection</a>
 			</div>
 			<div class="control_money">
 				<form method="POST" action="/sendMoney" class="container_money">
@@ -22,7 +23,7 @@
 				</form>
 			</div>
 	</section>
-	
+	<c:if test="${!empty listTransac}">
 	<section>
 		<h2>My Transactions</h2>
 		<table class="table_transactions">
@@ -35,9 +36,9 @@
 		    </thead>
 		    <tbody>
 		    	<tr>
-		            <td>Hayley</td>
-		            <td>Restaurant bill share</td>
-		            <td>10€</td>
+		            <td><c:out value="${listTransac.firstname}"/></td>
+		            <td><c:out value="${listTransac.description}"/></td>
+		            <td><c:out value="${listTransac.amount}"/></td>
 		        </tr>
 		        <tr>
 		            <td></td>
@@ -62,5 +63,6 @@
 			</table>
 		</div>
 	</section>
+	</c:if>
 	</body>
 </html>
