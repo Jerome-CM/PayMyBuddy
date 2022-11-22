@@ -8,3 +8,4 @@
         </jsp-property-group>
     </jsp-config>
 </web-app>
+<mvc:resources mapping="/resources/**" location="/resources/"/>

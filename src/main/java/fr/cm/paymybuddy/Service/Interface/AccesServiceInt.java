@@ -13,4 +13,8 @@ public interface AccesServiceInt {
     public RedirectView login(HttpServletRequest request);
 
     public RedirectView logout(HttpServletRequest request);
+
+    public boolean isUserExist(String mail);
+
+    public long idUser(String mail);
 }
