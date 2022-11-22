@@ -17,6 +17,12 @@ public class Transaction extends Model{
 
     private String description;
 
+    @Column(name="id_user")
+    private long myId;
+
+    @Column(name="id_friend")
+    private long idFriend;
+
     @Column(name="type_transaction")
     private TypeTransaction typeTransaction;
 
