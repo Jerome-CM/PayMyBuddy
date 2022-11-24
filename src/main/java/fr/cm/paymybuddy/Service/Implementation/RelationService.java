@@ -8,6 +8,7 @@ import fr.cm.paymybuddy.Service.Interface.RelationServiceInt;
 import fr.cm.paymybuddy.Utility.Utility;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.view.RedirectView;
@@ -15,7 +16,9 @@ import org.springframework.web.servlet.view.RedirectView;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.text.DateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import static com.fasterxml.jackson.databind.type.LogicalType.DateTime;
 
@@ -29,6 +32,9 @@ public class RelationService implements RelationServiceInt {
 
     @Autowired
     AccesServiceInt accesService;
+
+    @Autowired
+    ModelMapper modelMapper;
 
     @Override
     public RedirectView register(HttpServletRequest request) {
@@ -101,20 +107,31 @@ public class RelationService implements RelationServiceInt {
     @Override
     public RedirectView addFriend(HttpServletRequest request) {
 
-        /*long myId = Long.parseLong(request.getParameter("myId"));
-        User userFriend = userRepository.findByMail(request.getParameter("mail"));
+    String mailFriend = request.getParameter("mail");
+    String myMail = request.getParameter("mail_hidden");
 
-        logger.info("Friend finded with {} : {}", request.getParameter("mail"), userFriend);
+        if(mailFriend.equals("choose")) {
+            return new RedirectView("/addFriend?status=errorChooseEmpty");
+        } else if(isItMyFriend(myMail,mailFriend)){
+            return new RedirectView("/addFriend?status=errorAlreadyFriend");
+        } else {
+            User userFriend = userRepository.findByMail(mailFriend);
+            User me = userRepository.findByMail(myMail);
 
-        try{
-            logger.info("Try save : me : {}, myFriend : {}", myId, userFriend.getId());
-            userRepository.addFriend(myId, userFriend.getId());
-            logger.info("Relation saved between {} and {}", myId, userFriend.getId());
-            return new RedirectView("/addFriend?status=success");
-        } catch (Exception e) {
-            logger.error("Error : {}", e.getMessage());
-            return new RedirectView("/addFriend?status=error");
-        }*/
+            logger.info("Friend finded with {} : {}", mailFriend, userFriend);
+
+            List<User> myFriends = me.getFriends();
+            myFriends.add(userFriend);
+            logger.info("New list friend : {}", myFriends);
+            me.setFriends(myFriends);
+            try {
+                userRepository.save(me);
+                return new RedirectView("/addFriend?status=success");
+            } catch (Exception e) {
+                logger.error("Impossible to save a user with this friend : {} Error : {}", userFriend, e.getMessage());
+            }
+        }
+
         return new RedirectView("/addFriend?status=error");
     }
 
@@ -124,7 +141,46 @@ public class RelationService implements RelationServiceInt {
     }
 
     @Override
-    public boolean isItMyFriend(String mail) {
+    public boolean isItMyFriend(String myMail, String mailFriend){
+
+        logger.info("Mail sended : me {}, mail friend {}",myMail, mailFriend);
+
+        List<User> myfriends = userRepository.getMyFriends(userRepository.findByMail(myMail).getId());
+        logger.info("My friends finded : {}", myfriends);
+
+        for(User user : myfriends){
+            if(user.getMail().equals(mailFriend)){
+                return true;
+            }
+        }
         return false;
+    }
+
+    public List<FriendDTO> getListOfMyFriends(String mail){
+
+        long idMail = userRepository.findByMail(mail).getId();
+        logger.info("Mail sended : {}, id finded {}",mail, idMail);
+
+        List<User> listFriends = userRepository.getMyFriends(idMail);
+        logger.info("My friends finded : {}", listFriends);
+        
+        List<FriendDTO> listFriendsDTO = new ArrayList<>();
+        for(User friend : listFriends){
+            FriendDTO friendDTO = modelMapper.map(friend, FriendDTO.class);
+            listFriendsDTO.add(friendDTO);
+        }
+        logger.info("return : {}", listFriendsDTO);
+        return listFriendsDTO;
+    }
+
+    public List<User> getAllUserWithoutMe(String myMail){
+        List<User> listUser = (List<User>) userRepository.findAll();
+
+        for ( User user : listUser){
+            if(user.getMail().equals(myMail)){
+                listUser.remove(listUser.indexOf(user));
+            }
+        }
+        return listUser;
     }
 }

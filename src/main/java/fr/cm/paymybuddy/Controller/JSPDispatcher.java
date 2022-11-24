@@ -1,11 +1,17 @@
 package fr.cm.paymybuddy.Controller;
 
 import antlr.ASTNULLType;
+import fr.cm.paymybuddy.DTO.FriendDTO;
 import fr.cm.paymybuddy.DTO.TransactionDTO;
 import fr.cm.paymybuddy.Model.User;
+
 import fr.cm.paymybuddy.Repository.UserRepository;
 import fr.cm.paymybuddy.Service.Implementation.TransactionService;
+import fr.cm.paymybuddy.Service.Interface.RelationServiceInt;
 import fr.cm.paymybuddy.Service.Interface.TransactionServiceInt;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -13,18 +19,22 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
 public class JSPDispatcher {
 
-	private UserRepository userRepository;
+	private static final Logger logger = LogManager.getLogger(JSPDispatcher.class);
 
+	private UserRepository userRepository;
+	private RelationServiceInt relationService;
 	private TransactionServiceInt transactionService;
 
-	public JSPDispatcher(UserRepository userRepository, TransactionServiceInt transactionService) {
+	public JSPDispatcher(UserRepository userRepository, TransactionServiceInt transactionService, RelationServiceInt relationService) {
 		this.userRepository = userRepository;
 		this.transactionService = transactionService;
+		this.relationService = relationService;
 	}
 
 	@GetMapping("/login")
@@ -73,10 +83,27 @@ public class JSPDispatcher {
 	}
 
 	@GetMapping("/addFriend")
-	public String getAddFriend(ModelMap map) {
+	public String getAddFriend(HttpServletRequest request, ModelMap map) {
 
-		List<User> listUser = (List<User>) userRepository.findAll();
-		map.addAttribute("listUsers", listUser);
+		HttpSession session = request.getSession();
+
+		if(request.getParameter("status") != null) {
+			String statusType = request.getParameter("status");
+
+			if (statusType.equals("errorChooseEmpty")) {
+				session.setAttribute("error", "You don't have choose a friend");
+			} else if (statusType.equals("errorAlreadyFriend")) {
+				session.setAttribute("error", "You have already a relation with this friend");
+			} else if (statusType.equals("success")) {
+				session.setAttribute("error", "Friend recorded with success !");
+			}
+		}
+
+		String myMail = (String) session.getAttribute( "mail" );
+
+		map.addAttribute("listUsers", relationService.getAllUserWithoutMe(myMail));
+		map.addAttribute("listMyFriends", relationService.getListOfMyFriends(myMail));
+
 		return "addFriend";
 	}
 

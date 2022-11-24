@@ -5,7 +5,7 @@
     <body>
     
     <%@ include file="../include/menu.jsp" %>
-
+    <c:out value="${!empty sessionScope.error ? sessionScope.error : ''}"/>
 	<section class="money">
 			<div>
 				<h2>Add a connection</h2>
@@ -14,13 +14,12 @@
 			<div class="control_money">
 				<form method="POST" action="/addFriend" class="container_choose_friend">
 					<select name="mail">
-						<option value="test">Choose a user</option>
+						<option value="choose">Choose a user</option>
 						<c:forEach items="${ listUsers }" var="user">
 							<option value="<c:out value="${user.mail}"/>"> <c:out value="${user.firstname} ${user.lastname} - ${user.mail}"/></option>
 						</c:forEach>
 					</select>
-					// TODO put MyId
-					<input type="hidden" name="myId" value="3">
+					<input type="hidden" name="mail_hidden" value="${sessionScope.mail}">
 					<input type="submit" value="Save" name="submit" class="btn btn_pay">
 				</form>
 			</div>
@@ -38,14 +37,17 @@
 		        </tr>
 		    </thead>
 		    <tbody>
+			<c:forEach items="${listMyFriends}" var="friend">
 		    	<tr>
-		            <td>John</td>
-		            <td>Doe</td>
-		            <td>j.doe@gmail.com</td>
+		            <td><c:out value="${friend.firstname}"/></td>
+		            <td><c:out value="${friend.lastname}"/></td>
+		            <td><c:out value="${friend.mail}"/></td>
 		            <td>X</td>
 		        </tr>
+			</c:forEach>
 		    </tbody>
 		</table>
 	</section>
+    <% session.removeAttribute("error"); %>
 	</body>
 </html>
