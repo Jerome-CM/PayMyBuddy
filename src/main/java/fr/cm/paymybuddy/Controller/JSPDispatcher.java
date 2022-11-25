@@ -7,6 +7,7 @@ import fr.cm.paymybuddy.Model.User;
 
 import fr.cm.paymybuddy.Repository.UserRepository;
 import fr.cm.paymybuddy.Service.Implementation.TransactionService;
+import fr.cm.paymybuddy.Service.Interface.OtherServiceInt;
 import fr.cm.paymybuddy.Service.Interface.RelationServiceInt;
 import fr.cm.paymybuddy.Service.Interface.TransactionServiceInt;
 import org.apache.logging.log4j.LogManager;
@@ -30,11 +31,13 @@ public class JSPDispatcher {
 	private UserRepository userRepository;
 	private RelationServiceInt relationService;
 	private TransactionServiceInt transactionService;
+	private OtherServiceInt otherService;
 
-	public JSPDispatcher(UserRepository userRepository, TransactionServiceInt transactionService, RelationServiceInt relationService) {
+	public JSPDispatcher(UserRepository userRepository, TransactionServiceInt transactionService, RelationServiceInt relationService,OtherServiceInt otherService) {
 		this.userRepository = userRepository;
 		this.transactionService = transactionService;
 		this.relationService = relationService;
+		this.otherService = otherService;
 	}
 
 	@GetMapping("/login")
@@ -58,18 +61,21 @@ public class JSPDispatcher {
 	public String getRegister() {
 		return "register";
 	}
-	
+
+
 	@GetMapping("/home")
 	public String getHome(HttpServletRequest request, ModelMap map) {
-
-		String url = request.getRequestURI();
-
-		map.addAttribute("url", url);
+		String url = (String)request.getRequestURI();
+		List<String> accessPath = otherService.accessPath(url);
+		map.addAttribute("accessPath", accessPath);
 		return "home";
 	}
 
 	@GetMapping("/transfert")
 	public String getTransfert(HttpServletRequest request, ModelMap map) {
+		String url = (String)request.getRequestURI();
+		List<String> accessPath = otherService.accessPath(url);
+		map.addAttribute("accessPath", accessPath);
 
 		HttpSession session = request.getSession();
 		if(request.getParameter("status") != null) {
@@ -92,6 +98,10 @@ public class JSPDispatcher {
 
 	@GetMapping("/profile")
 	public String getProfile(HttpServletRequest request, ModelMap map) {
+		String url = (String)request.getRequestURI();
+		List<String> accessPath = otherService.accessPath(url);
+		map.addAttribute("accessPath", accessPath);
+
 		HttpSession session = request.getSession();
 		String myMail = (String) session.getAttribute( "mail" );
 
@@ -102,6 +112,9 @@ public class JSPDispatcher {
 
 	@GetMapping("/addFriend")
 	public String getAddFriend(HttpServletRequest request, ModelMap map) {
+		String url = (String)request.getRequestURI();
+		List<String> accessPath = otherService.accessPath(url);
+		map.addAttribute("accessPath", accessPath);
 
 		HttpSession session = request.getSession();
 
@@ -126,7 +139,11 @@ public class JSPDispatcher {
 	}
 
 	@GetMapping("/contact")
-	public String getContact() {
+	public String getContact(HttpServletRequest request, ModelMap map) {
+		String url = (String)request.getRequestURI();
+		List<String> accessPath = otherService.accessPath(url);
+		map.addAttribute("accessPath", accessPath);
+
 		return "contact";
 	}
 

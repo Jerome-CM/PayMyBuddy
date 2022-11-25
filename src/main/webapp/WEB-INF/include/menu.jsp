@@ -8,3 +8,10 @@
 		<li><a href="/home">Logout</a></li>
 	</ul>
 </nav>
+<section>
+	<div class="content_access_path">
+		<c:forEach items="${accessPath}" var="span">
+			<span class="span_access_path"><c:out value="${span}"/></span>
+		</c:forEach>
+	</div>
+</section>
