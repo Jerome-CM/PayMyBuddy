@@ -1,3 +1,4 @@
+<%@ taglib prefix="input" uri="http://www.springframework.org/tags/form" %>
 
 <%@ include file="../include/header.jsp" %>
         <title>dashboard</title>
@@ -13,12 +14,15 @@
 			</div>
 			<div class="control_money">
 				<form method="POST" action="/sendMoney" class="container_money">
-				
-					<select name="friend">
+					<select name="mailFriend">
 						<option value="">Choose a connection</option>
-						<!--  Affiche les options avec une boucle jstl -->
+						<c:forEach items="${ listMyFriends }" var="user">
+							<option value="<c:out value="${user.mail}"/>"> <c:out value="${user.firstname} ${user.lastname} - ${user.mail}"/></option>
+						</c:forEach>
 					</select>
 					<input type="number" name="amount" value="0">
+					<input type="text" name="description" placeholder="Description">
+					<input type="hidden" name="mail_hidden" value="${sessionScope.mail}">
 					<input type="submit" value="Pay" name="submit" class="btn btn_pay">
 				</form>
 			</div>
@@ -35,16 +39,13 @@
 		        </tr>
 		    </thead>
 		    <tbody>
+			<c:forEach items="${listTransac}" var="transac">
 		    	<tr>
-		            <td><c:out value="${listTransac.firstname}"/></td>
-		            <td><c:out value="${listTransac.description}"/></td>
-		            <td><c:out value="${listTransac.amount}"/></td>
+		            <td><c:out value="${transac.friendFirstname}"/></td>
+		            <td><c:out value="${transac.description}"/></td>
+		            <td><c:out value="${transac.amount}"/></td>
 		        </tr>
-		        <tr>
-		            <td></td>
-		            <td></td>
-		            <td></td>
-		        </tr>
+			</c:forEach>
 		    </tbody>
 		</table>
 		<div class="pagination">

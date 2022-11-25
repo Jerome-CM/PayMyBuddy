@@ -14,7 +14,7 @@ public interface TransactionServiceInt {
 
     public RedirectView sendMoney(HttpServletRequest request);
 
-    public boolean haveIEnoughMoney (UserDTO userDTO, double amount);
+    public boolean haveIEnoughMoney(String mail, double amount);
     public List<TransactionDTO> historyTransaction(long id);
 
 }

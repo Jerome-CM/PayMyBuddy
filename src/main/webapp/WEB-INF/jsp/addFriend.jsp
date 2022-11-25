@@ -33,7 +33,6 @@
 		            <th>Firstname</th>
 		            <th>Lastname</th>
 		            <th>Mail</th>
-		            <th>Action</th>
 		        </tr>
 		    </thead>
 		    <tbody>
@@ -42,7 +41,6 @@
 		            <td><c:out value="${friend.firstname}"/></td>
 		            <td><c:out value="${friend.lastname}"/></td>
 		            <td><c:out value="${friend.mail}"/></td>
-		            <td>X</td>
 		        </tr>
 			</c:forEach>
 		    </tbody>

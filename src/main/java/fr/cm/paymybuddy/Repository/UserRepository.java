@@ -23,7 +23,7 @@ public interface UserRepository extends CrudRepository <User,Long> {
 
     @Transactional
     @Modifying
-    @Query(value ="UPDATE users SET account_balance=?1, date_modification=NOW() WHERE mail=?2", nativeQuery = true)
+    @Query(value ="UPDATE users SET account_balance=?1 WHERE mail=?2", nativeQuery = true)
     public void updateAccountBalance(double amount, String mail);
     
 

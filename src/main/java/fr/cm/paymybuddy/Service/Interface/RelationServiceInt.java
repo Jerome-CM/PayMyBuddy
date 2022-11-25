@@ -17,12 +17,12 @@ public interface RelationServiceInt {
 
     public RedirectView addFriend(HttpServletRequest request);
 
-    public RedirectView deleteFriend(FriendDTO friendDTO);
+    public RedirectView deleteFriend(HttpServletRequest request);
 
     public boolean isItMyFriend(String myMail, String mailFriend);
 
     public List<FriendDTO> getListOfMyFriends(String mail);
 
-    public List<User> getAllUserWithoutMe(String myMail);
+    public List<FriendDTO> getAllUserWithoutMe(String myMail);
 
 }

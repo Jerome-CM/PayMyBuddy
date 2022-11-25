@@ -39,7 +39,7 @@ public class AccessService implements AccesServiceInt {
 		logger.info("Data from login - mail : {} password : {}", mail, mdp );
 
 		try{
-			if(isUserExist((mail))){
+			if(this.isUserExist((mail))){
 
 				HttpSession session = request.getSession();
 				session.setAttribute("mail", mail);

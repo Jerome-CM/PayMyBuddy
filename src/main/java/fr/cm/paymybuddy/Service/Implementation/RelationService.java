@@ -10,6 +10,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.view.RedirectView;
 
@@ -32,6 +33,9 @@ public class RelationService implements RelationServiceInt {
 
     @Autowired
     AccesServiceInt accesService;
+
+    @Autowired
+    PasswordEncoder passwordEncoder;
 
     @Autowired
     ModelMapper modelMapper;
@@ -101,7 +105,27 @@ public class RelationService implements RelationServiceInt {
 
     @Override
     public RedirectView modifyUserPassword(HttpServletRequest request) {
-        return new RedirectView("/");
+
+        String password = request.getParameter("password");
+        String confirmPassword = request.getParameter("confirmPassword");
+        String mail = request.getParameter("mail_hidden");
+
+        User me = userRepository.findByMail(mail);
+
+        if(password.equals(confirmPassword)){
+            me.setPassword(passwordEncoder.encode(password));
+
+            try{
+                userRepository.save(me);
+                return new RedirectView("/profile?status=successChangePassword");
+            } catch (Exception e) {
+                return new RedirectView("/profile?status=errorSaveNewPassword");
+            }
+        } else {
+            return new RedirectView("/profile?status=errorPasswordNotSame");
+        }
+
+
     }
 
     @Override
@@ -136,14 +160,34 @@ public class RelationService implements RelationServiceInt {
     }
 
     @Override
-    public RedirectView deleteFriend(FriendDTO friendDTO) {
-        return new RedirectView("/");
+    public RedirectView deleteFriend(HttpServletRequest request) {
+
+        String myToDelete = request.getParameter("friend");
+        HttpSession session = request.getSession();
+        User me = userRepository.findByMail((String)session.getAttribute("mail"));
+        List<User> myFriendList = userRepository.getMyFriends(me.getId());
+
+        List<User> myNewFriendList = new ArrayList<>();
+        for(User user : myFriendList){
+            if(!user.getMail().equals(myToDelete)){
+                myNewFriendList.add(user);
+            }
+        }
+
+        me.setFriends(myNewFriendList);
+        try{
+            userRepository.save(me);
+            return new RedirectView("/profile?status=successRemove");
+        } catch (Exception e) {
+            return new RedirectView("/profile?status=errorRemove");
+        }
+
     }
 
     @Override
     public boolean isItMyFriend(String myMail, String mailFriend){
 
-        logger.info("Mail sended : me {}, mail friend {}",myMail, mailFriend);
+        logger.info("Mail friend {}",myMail, mailFriend);
 
         List<User> myfriends = userRepository.getMyFriends(userRepository.findByMail(myMail).getId());
         logger.info("My friends finded : {}", myfriends);
@@ -159,28 +203,30 @@ public class RelationService implements RelationServiceInt {
     public List<FriendDTO> getListOfMyFriends(String mail){
 
         long idMail = userRepository.findByMail(mail).getId();
-        logger.info("Mail sended : {}, id finded {}",mail, idMail);
 
         List<User> listFriends = userRepository.getMyFriends(idMail);
-        logger.info("My friends finded : {}", listFriends);
-        
+
         List<FriendDTO> listFriendsDTO = new ArrayList<>();
         for(User friend : listFriends){
             FriendDTO friendDTO = modelMapper.map(friend, FriendDTO.class);
             listFriendsDTO.add(friendDTO);
         }
-        logger.info("return : {}", listFriendsDTO);
+        logger.info("List of my FriendDTO : {}", listFriendsDTO);
         return listFriendsDTO;
     }
 
-    public List<User> getAllUserWithoutMe(String myMail){
+    public List<FriendDTO> getAllUserWithoutMe(String myMail){
         List<User> listUser = (List<User>) userRepository.findAll();
+        List<FriendDTO> listUsersDTO = new ArrayList<>();
 
         for ( User user : listUser){
-            if(user.getMail().equals(myMail)){
-                listUser.remove(listUser.indexOf(user));
+
+            if(!user.getMail().equals(myMail)){
+                FriendDTO friendDTO = modelMapper.map(user, FriendDTO.class);
+                listUsersDTO.add(friendDTO);
             }
         }
-        return listUser;
+        logger.info("List of all usersDTO without me : {}", listUsersDTO);
+        return listUsersDTO;
     }
 }

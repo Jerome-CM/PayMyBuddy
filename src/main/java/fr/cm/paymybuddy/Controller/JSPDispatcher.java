@@ -60,16 +60,32 @@ public class JSPDispatcher {
 	}
 	
 	@GetMapping("/home")
-	public String getHome() {
+	public String getHome(HttpServletRequest request, ModelMap map) {
+
+		String url = request.getRequestURI();
+
+		map.addAttribute("url", url);
 		return "home";
 	}
 
 	@GetMapping("/transfert")
 	public String getTransfert(HttpServletRequest request, ModelMap map) {
+
 		HttpSession session = request.getSession();
-		long id = userRepository.findByMail((String) session.getAttribute( "mail" )).getId();
-		// List<TransactionDTO> listTransac = transactionService.historyTransaction(id);
-		// map.addAttribute("listTransac", listTransac);
+		if(request.getParameter("status") != null) {
+			String statusType = request.getParameter("status");
+
+			if (statusType.equals("errorChooseEmpty")) {
+				session.setAttribute("error", "You don't have choose a friend");
+			}  else if (statusType.equals("success")) {
+				session.setAttribute("error", "Friend recorded with success !");
+			}
+		}
+
+		User me = userRepository.findByMail((String) session.getAttribute( "mail" ));
+		map.addAttribute("listMyFriends", relationService.getListOfMyFriends(me.getMail()));
+
+		map.addAttribute("listTransac", transactionService.historyTransaction(me.getId()));
 
 		return "transfert";
 	}
@@ -77,8 +93,10 @@ public class JSPDispatcher {
 	@GetMapping("/profile")
 	public String getProfile(HttpServletRequest request, ModelMap map) {
 		HttpSession session = request.getSession();
-		double userBalance = userRepository.findByMail((String) session.getAttribute( "mail" )).getAccountBalance();
-		map.addAttribute("userBalance", userBalance);
+		String myMail = (String) session.getAttribute( "mail" );
+
+		map.addAttribute("userBalance", userRepository.findByMail(myMail).getAccountBalance());
+		map.addAttribute("listMyFriends", relationService.getListOfMyFriends(myMail));
 		return "profile";
 	}
 
