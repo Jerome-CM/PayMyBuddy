@@ -2,18 +2,11 @@
         <title>Add a friend</title>
     </head>
     <body>
-    <c:choose>
-		<c:when test="${!empty modifInfos && modifInfos == yes}">Yours informations as been changed</c:when>
-		<c:when test="${!empty modifPassword && modifPassword == yes}">Your password as been changed</c:when>
-		<c:when test="${!empty refund && refund == yes}">+${amount}€ added in your account</c:when>
-		<c:otherwise> </c:otherwise>
-	</c:choose>
     <%@ include file="../include/menu.jsp" %>
 
 	<section class="money">
 			<div>
 				<h2>My informations</h2>
-				
 			</div>
 			<div class="control_money">
 				<form method="POST" action="/modifyingUserInfos" class="container_money control_informations">
@@ -47,10 +40,10 @@
 			<div class="control_money container_money">
 			
 			<p>
-				<c:if test="${userBalance > 0}">
+				<c:if test="${user.accountBalance > 0}">
 					+
 				</c:if>
-				<c:out value="${userBalance}"/>
+				<c:out value="${user.accountBalance}"/>
 			€</p>
 				<form method="POST" action="/refundMyAccount" class="control_add_money">
 				<div class="content_input_money">
@@ -62,30 +55,30 @@
 				</form>
 			</div>
 	</section>
-	
+
 	<section>
 		<h2>My friends</h2>
-		<table class="table_transactions">
+		<table class="table_transactions table_friend">
 			<thead>
-		        <tr>
-		            <th>Firstname</th>
-		            <th>Lastname</th>
-		            <th>Action</th>
-		        </tr>
-		    </thead>
-		    <tbody>
-		    	<tr>
-		            <td>John</td>
-		            <td>Doe</td>
-		            <td>X</td>
-		        </tr>
-		        <tr>
-		            <td></td>
-		            <td></td>
-		            <td></td>
-		        </tr>
-		    </tbody>
+			<tr>
+				<th>Firstname</th>
+				<th>Lastname</th>
+				<th>Mail</th>
+				<th>Action</th>
+			</tr>
+			</thead>
+			<tbody>
+			<c:forEach items="${user.listFriends}" var="friend">
+				<tr>
+					<td><c:out value="${friend.firstname}"/></td>
+					<td><c:out value="${friend.lastname}"/></td>
+					<td><c:out value="${friend.mail}"/></td>
+					<td><a href="/deleteFriend?friend=<c:out value="${friend.mail}"/>">X</a></td>
+				</tr>
+			</c:forEach>
+			</tbody>
 		</table>
 	</section>
+	<%@ include file="../include/footer.jsp" %>
 	</body>
 </html>

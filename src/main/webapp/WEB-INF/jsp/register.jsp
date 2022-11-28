@@ -6,7 +6,7 @@
     <%@ include file="../include/menu.jsp" %>
     
     <br>
-    <p style="text-align:center;">Welcome, you are a new user in Pay My Buddy application, please complete your profil for start experience</p>
+    <p style="text-align:center;">Welcome, you are a new user in Pay My Buddy application, please complete your profile for start experience</p>
 
 	<section class="money">
 			<div>
@@ -43,7 +43,7 @@
 				</form>
 			</div>
 	</section>
-
+	<%@ include file="../include/footer.jsp" %>
 	</body>
 </html>
 

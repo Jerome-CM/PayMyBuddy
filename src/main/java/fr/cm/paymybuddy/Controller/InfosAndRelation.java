@@ -3,6 +3,7 @@ package fr.cm.paymybuddy.Controller;
 import fr.cm.paymybuddy.Service.Interface.AccesServiceInt;
 import fr.cm.paymybuddy.Service.Interface.RelationServiceInt;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.view.RedirectView;
@@ -36,6 +37,11 @@ public class InfosAndRelation {
     @PostMapping("/addFriend")
     public RedirectView addFriend(HttpServletRequest request){
         return relationService.addFriend(request);
+    }
+
+    @GetMapping("/deleteFriend")
+    public RedirectView deleteFriend(HttpServletRequest request){
+        return relationService.deleteFriend(request);
     }
 
 }

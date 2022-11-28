@@ -1,5 +1,5 @@
 <%@ include file="../include/header.jsp" %>
-        <title>Add a friend</title>
+        <title>Home</title>
     </head>
     <body>
     
@@ -7,11 +7,9 @@
 
 	<section class="money">
 			<div>
-				<h2>Send a message</h2>
-			</div>
-			<div class="control_money contact">
-				<c:out value="${status}"/>
+				<h2>Welcome to home</h2>
 			</div>
 	</section>
+	<%@ include file="../include/footer.jsp" %>
 	</body>
 </html>
