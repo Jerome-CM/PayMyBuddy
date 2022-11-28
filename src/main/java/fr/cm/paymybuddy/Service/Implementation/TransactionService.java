@@ -59,7 +59,7 @@ public class TransactionService implements TransactionServiceInt {
             logger.info("Account Balance update, Balance Account : {}", userBalanceAfter);
         } catch (Exception e) {
             logger.info("Error : {}", e.getMessage());
-            return new RedirectView("/profile?status=error");
+            return new RedirectView("/profile?status=errorRefund");
         }
 
         // Table Transactions
@@ -88,10 +88,10 @@ public class TransactionService implements TransactionServiceInt {
             userRepository.save(user);
             transactionRepository.save(t);
             logger.info("Transaction save in BDD ");
-            return new RedirectView("/profile?status=succes&refund=yes&amount="+ amount);
+            return new RedirectView("/profile?status=successRefund&amount="+ amount);
         } catch (Exception e) {
             logger.info("Error : {}", e.getMessage());
-            return new RedirectView("/profile?status=error");
+            return new RedirectView("/profile?status=errorRefund");
         }
 
     }
@@ -134,10 +134,10 @@ public class TransactionService implements TransactionServiceInt {
                 userRepository.save(friend);
                 transactionRepository.save(t);
                 logger.info("Transaction save in BDD ");
-                return new RedirectView("/transfert?status=success&transfer=yes&amount="+ amount);
+                return new RedirectView("/transfert?status=successTransfer&amount="+ amount+"&friend="+friend.getFirstname());
             } catch (Exception e) {
                 logger.info("Error : {}", e.getMessage());
-                return new RedirectView("/transfert?status=error");
+                return new RedirectView("/transfert?status=errorTransfert");
             }
 
         } else {
@@ -172,32 +172,16 @@ public class TransactionService implements TransactionServiceInt {
 
     @Override
     public RedirectView previousPageTransaction(HttpServletRequest request) {
-        Integer page = Integer.parseInt(request.getParameter("page"));
-       /* if(request.getParameter("page") != null){
-            Integer page = Integer.parseInt(request.getParameter("page"));
-            logger.info("page recup : {}", page);
-            if(page > 1){
-                page = page - 1;
-                logger.info("page return : {}", page);
-                return new RedirectView("/transfert?page="+page);
-            } else {
-                return new RedirectView("/transfert");
-            }
-        } else {
-            return new RedirectView("/transfert");
-        }*/
 
+        Integer page = request.getParameter("page") != null ? Integer.parseInt(request.getParameter("page")) : 1;
+        page = page < 1 ? 1 : page;
         return new RedirectView("/transfert?page="+page);
     }
 
     @Override
     public RedirectView nextPageTransaction(HttpServletRequest request) {
-        Integer page = Integer.parseInt(request.getParameter("page"));
-      /*  Integer page = 0;
-        if(request.getParameter("page") != null){
-            page = Integer.parseInt(request.getParameter("page"));
-            page = page + 1;
-        }*/
+
+        Integer page = request.getParameter("page") != null ? Integer.parseInt(request.getParameter("page")) : 1;
         return new RedirectView("/transfert?page="+page);
     }
 }

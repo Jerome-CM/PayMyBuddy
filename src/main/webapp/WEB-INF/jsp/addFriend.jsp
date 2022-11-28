@@ -3,9 +3,7 @@
         <title>Add a friend</title>
     </head>
     <body>
-    
     <%@ include file="../include/menu.jsp" %>
-    <c:out value="${!empty sessionScope.error ? sessionScope.error : ''}"/>
 	<section class="money">
 			<div>
 				<h2>Add a connection</h2>
@@ -46,6 +44,6 @@
 		    </tbody>
 		</table>
 	</section>
-    <% session.removeAttribute("error"); %>
+	<%@ include file="../include/footer.jsp" %>
 	</body>
 </html>

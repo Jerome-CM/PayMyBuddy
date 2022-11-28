@@ -32,7 +32,6 @@ public class JSPDispatcher {
 	private static final Logger logger = LogManager.getLogger(JSPDispatcher.class);
 
 	private UserRepository userRepository;
-
 	private TransactionRepository transactionRepository;
 	private RelationServiceInt relationService;
 	private TransactionServiceInt transactionService;
@@ -52,23 +51,31 @@ public class JSPDispatcher {
 
 	@GetMapping("/login")
 	public String getLogin(HttpServletRequest request, ModelMap map) {
-
+		HttpSession session = request.getSession();
 		if(request.getParameter("status") != null) {
 			String statusType = request.getParameter("status");
 
 			if (statusType.equals("errorPassEmpty")) {
-				HttpSession session = request.getSession();
-				session.setAttribute("error", "Your password is empty");
+				session.setAttribute("notification", "Your password is empty");
 			} else if (statusType.equals("errorMailEmpty")) {
-				HttpSession session = request.getSession();
-				session.setAttribute("error", "Your mail is empty");
+				session.setAttribute("notification", "Your mail is empty");
+			} else if (statusType.equals("errorFindedUser")) {
+				session.setAttribute("notification", "Sorry, you don't have finded, please login first");
 			}
 		}
 		return "login";
 	}
 
 	@GetMapping("/register")
-	public String getRegister() {
+	public String getRegister(HttpServletRequest request) {
+		HttpSession session = request.getSession();
+		if(request.getParameter("status") != null) {
+			String statusType = request.getParameter("status");
+
+			if (statusType.equals("errorUpdateUser")) {
+				session.setAttribute("notification", "Update yours informations is impossible");
+			}
+		}
 		return "register";
 	}
 
@@ -92,62 +99,94 @@ public class JSPDispatcher {
 			String statusType = request.getParameter("status");
 
 			if (statusType.equals("errorChooseEmpty")) {
-				session.setAttribute("error", "You don't have choose a friend");
-			}  else if (statusType.equals("success")) {
-				session.setAttribute("error", "Friend recorded with success !");
+				session.setAttribute("notification", "You don't have choose a friend");
+			}  else if (statusType.equals("errorLittleAmount")) {
+				session.setAttribute("notification", "Please, choose an amount better than 1€");
+			} else if (statusType.equals("successTransfer")) {
+				session.setAttribute("notification", "Transfer success : "+ request.getParameter("amount") +"€ to "+ request.getParameter("friend"));
+			} else if (statusType.equals("errorTransfert")) {
+				session.setAttribute("notification", "This transfer is impossible");
+			} else if (statusType.equals("errorNotMoney")) {
+				session.setAttribute("notification", "You don't have enought money for this transfer amount");
+			} else if (statusType.equals("successRegister")) {
+				session.setAttribute("notification", "Your registration is full, welcome to PayMyBuddy !");
 			}
 		}
 
 		User me = userRepository.findByMail((String) session.getAttribute( "mail" ));
-		map.addAttribute("listMyFriends", relationService.getListOfMyFriends(me.getMail()));
+		map.addAttribute("userDTO", relationService.getProfileDTO(me));
 
 		int nbrTransactionPerPage = 3;
 		int limitStart = 0;
 		int limitEnd;
 		int totalNbrPage = (int)Math.ceil(transactionRepository.findAllByUserId(me.getId()).size() / nbrTransactionPerPage);
 
-
-		Integer requestPage = request.getParameter("page") != null?Integer.parseInt(request.getParameter("page")):0;
-		if(session.getAttribute("page") == null || Integer.parseInt(request.getParameter("page")) <= 1){
+		Integer requestPage = 0;
+		// Initialize pagination
+		if(request.getParameter("page") == null && session.getAttribute("page") == null){
+			session.setAttribute("page", 1);
+			requestPage = 0;
+		// Current page
+		} else if (request.getParameter("page") != null && session.getAttribute("page") != null){
+			requestPage = Integer.valueOf(request.getParameter("page"));
+			session.setAttribute("page", requestPage);
+		// Exception
+		} else if (request.getParameter("page") != null && Integer.valueOf(request.getParameter("page")) > totalNbrPage){
+			requestPage = totalNbrPage;
+			session.setAttribute("page", totalNbrPage);
+		} else if(request.getParameter("page") != null && Integer.valueOf(request.getParameter("page")) < 0){
+			requestPage = 0;
 			session.setAttribute("page", 1);
 		} else {
-			if(Integer.parseInt(request.getParameter("page")) >= totalNbrPage){
-
-			} else {
-				session.setAttribute("page", request.getParameter("page"));
-			}
-
+			requestPage = 0;
+			session.setAttribute("page", 1);
 		}
-		logger.info("pageRequest sended {}", requestPage);
-		logger.info("total page {}", totalNbrPage);
-		if( requestPage == 0 || requestPage > totalNbrPage ) {
+
+		if( requestPage == 0) {
 			limitEnd = limitStart + nbrTransactionPerPage;
 		} else {
 			limitStart = (requestPage * nbrTransactionPerPage) - nbrTransactionPerPage;
-			limitEnd = (requestPage * nbrTransactionPerPage);
+			limitEnd = nbrTransactionPerPage;
 		}
 		logger.info("Limit {},{}", limitStart, limitEnd);
 		map.addAttribute("nbrPages", totalNbrPage);
-		map.addAttribute("listTransac", transactionService.historyTransaction(me.getId(),limitStart,limitEnd));
+		map.addAttribute("listTransacDTO", transactionService.historyTransaction(me.getId(),limitStart,limitEnd));
 
 		return "transfert";
 	}
 
 	@GetMapping("/profile")
 	public String getProfile(HttpServletRequest request, ModelMap map) {
+		HttpSession session = request.getSession();
+
+		if(request.getParameter("status") != null) {
+			String statusType = request.getParameter("status");
+
+			if (statusType.equals("errorUpdateInformations")) {
+				session.setAttribute("notification", "Update yours informations is impossible");
+			} else if (statusType.equals("errorSaveNewPassword")) {
+				session.setAttribute("notification", "Save your new passwword is impossible");
+			} else if (statusType.equals("errorPasswordNotSame")) {
+				session.setAttribute("notification", "Yours password isn't same !");
+			} else if (statusType.equals("successModifInfos")) {
+				session.setAttribute("notification", "Yours informations is saved");
+			} else if (statusType.equals("successChangePassword")) {
+				session.setAttribute("notification", "New password recorded with success !");
+			} else if (statusType.equals("errorRefund")) {
+				session.setAttribute("notification", "The refund is impossible");
+			} else if (statusType.equals("successRefund")) {
+				session.setAttribute("notification", "Your account is reloaded now with "+ request.getParameter("amount") +"€");
+			}
+		}
+
 		String url = request.getRequestURI();
 		List<String> accessPath = otherService.accessPath(url);
 		map.addAttribute("accessPath", accessPath);
 
-		HttpSession session = request.getSession();
+
 		User me = userRepository.findByMail((String) session.getAttribute( "mail" ));
+		map.addAttribute("user", relationService.getProfileDTO(me));
 
-		ProfilDTO profileDTO = new ProfilDTO();
-		profileDTO = modelMapper.map(me, ProfilDTO.class);
-
-		map.addAttribute("userTest", relationService.testGetProfileDTO(me));
-		map.addAttribute("userBalance", userRepository.findByMail(me.getMail()).getAccountBalance());
-		map.addAttribute("listMyFriends", relationService.getListOfMyFriends(me.getMail()));
 		return "profile";
 	}
 
@@ -163,18 +202,18 @@ public class JSPDispatcher {
 			String statusType = request.getParameter("status");
 
 			if (statusType.equals("errorChooseEmpty")) {
-				session.setAttribute("error", "You don't have choose a friend");
+				session.setAttribute("notification", "You don't have choose a friend");
 			} else if (statusType.equals("errorAlreadyFriend")) {
-				session.setAttribute("error", "You have already a relation with this friend");
+				session.setAttribute("notification", "You have already a relation with this friend");
 			} else if (statusType.equals("success")) {
-				session.setAttribute("error", "Friend recorded with success !");
+				session.setAttribute("notification", "Friend recorded with success !");
 			}
 		}
 
-		String myMail = (String) session.getAttribute( "mail" );
+		User me = userRepository.findByMail((String) session.getAttribute( "mail" ));
 
-		map.addAttribute("listUsers", relationService.getAllUserWithoutMe(myMail));
-		map.addAttribute("listMyFriends", relationService.getListOfMyFriends(myMail));
+		map.addAttribute("listUsers", relationService.getAllUserWithoutMe(me.getMail()));
+		map.addAttribute("listMyFriends", relationService.getProfileDTO(me));
 
 		return "addFriend";
 	}

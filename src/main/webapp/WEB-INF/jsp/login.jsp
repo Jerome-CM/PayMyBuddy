@@ -8,13 +8,11 @@
 		    <h1 class="h1_form">Pay My Buddy</h1>
 			<c:out value="${!empty sessionScope.error ? sessionScope.error : ''}"/>
 		    <form action="/loginFormControl" method="post">
-		    	<input type="email" name="mail" placeholder="Identifiant">
-		    	<input type="password" name="password" placeholder="Mot de passe">
+		    	<input type="email" name="mail" placeholder="Identifiant" value="bouteveillejerome@hotmail.fr">
+		    	<input type="password" name="password" placeholder="Mot de passe" value="b">
 		    	<p class="remember"><input type="checkbox" name="remember"> Remember me</p>
 		    	<input type="submit" value="Login" name="submit" class="submit btn">
 		    </form>
-	    </div>
+	    </div><%@ include file="../include/footer.jsp" %>
     </body>
-
-<% session.removeAttribute("error"); %>
 </html>

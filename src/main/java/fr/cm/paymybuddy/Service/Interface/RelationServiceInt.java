@@ -1,6 +1,7 @@
 package fr.cm.paymybuddy.Service.Interface;
 
 import fr.cm.paymybuddy.DTO.FriendDTO;
+import fr.cm.paymybuddy.DTO.ProfilDTO;
 import fr.cm.paymybuddy.Model.User;
 import org.springframework.web.servlet.view.RedirectView;
 
@@ -24,5 +25,7 @@ public interface RelationServiceInt {
     public List<FriendDTO> getListOfMyFriends(String mail);
 
     public List<FriendDTO> getAllUserWithoutMe(String myMail);
+
+    public ProfilDTO getProfileDTO(User user);
 
 }

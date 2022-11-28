@@ -1,3 +1,4 @@
+<c:out value="${!empty sessionScope.notification ? sessionScope.notification : ''}"/>
 <nav>
 <span class="appereance_h1"><h1>PayMyBuddy</h1></span>
 	<ul>

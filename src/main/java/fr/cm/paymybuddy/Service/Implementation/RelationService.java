@@ -1,6 +1,7 @@
 package fr.cm.paymybuddy.Service.Implementation;
 
 import fr.cm.paymybuddy.DTO.FriendDTO;
+import fr.cm.paymybuddy.DTO.ProfilDTO;
 import fr.cm.paymybuddy.Model.User;
 import fr.cm.paymybuddy.Repository.UserRepository;
 import fr.cm.paymybuddy.Service.Interface.AccesServiceInt;
@@ -60,15 +61,15 @@ public class RelationService implements RelationServiceInt {
 
             try{
                 userRepository.save(user);
-                return new RedirectView("/transfert?status=success");
+                return new RedirectView("/transfert?status=successRegister");
 
             } catch(Exception e){
                 logger.error("Impossible to register the news informations : {}", e.getMessage());
-                return new RedirectView("/profile?status=errorUpdateUser");
+                return new RedirectView("/register?status=errorUpdateUser");
             }
         } else {
             logger.error("User not finded for update");
-            return new RedirectView("/register?status=errorFindedUser");
+            return new RedirectView("/login?status=errorFindedUser");
         }
     }
 
@@ -95,7 +96,7 @@ public class RelationService implements RelationServiceInt {
             userRepository.save(user);
             logger.info("Infos user update : {}", user );
 
-            return new RedirectView("/profile?status=success&modifInfos=yes");
+            return new RedirectView("/profile?status=successModifInfos");
 
         } catch(Exception e){
             logger.error("Impossible to register the news informations : {}", e.getMessage());
@@ -228,5 +229,15 @@ public class RelationService implements RelationServiceInt {
         }
         logger.info("List of all usersDTO without me : {}", listUsersDTO);
         return listUsersDTO;
+    }
+
+    public ProfilDTO getProfileDTO(User user){
+        User me = userRepository.findByMail(user.getMail());
+
+        ProfilDTO profileDTO = new ProfilDTO();
+        profileDTO = modelMapper.map(me, ProfilDTO.class);
+
+        logger.info("return DTO : {}", profileDTO);
+        return profileDTO;
     }
 }

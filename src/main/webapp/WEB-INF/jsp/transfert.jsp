@@ -16,7 +16,7 @@
 				<form method="POST" action="/sendMoney" class="container_money">
 					<select name="mailFriend">
 						<option value="">Choose a connection</option>
-						<c:forEach items="${ listMyFriends }" var="user">
+						<c:forEach items="${ userDTO.listFriends }" var="user">
 							<option value="<c:out value="${user.mail}"/>"> <c:out value="${user.firstname} ${user.lastname} - ${user.mail}"/></option>
 						</c:forEach>
 					</select>
@@ -27,7 +27,7 @@
 				</form>
 			</div>
 	</section>
-	<c:if test="${!empty listTransac}">
+	<c:if test="${!empty listTransacDTO}">
 	<section>
 		<h2>My Transactions</h2>
 		<table class="table_transactions">
@@ -39,7 +39,7 @@
 		        </tr>
 		    </thead>
 		    <tbody>
-			<c:forEach items="${listTransac}" var="transac">
+			<c:forEach items="${listTransacDTO}" var="transac">
 		    	<tr>
 		            <td><c:out value="${transac.friendFirstname}"/></td>
 		            <td><c:out value="${transac.description}"/></td>
@@ -52,18 +52,17 @@
 			<table>
 				<tbody>
 					<tr>
-						<td><<</td>
-						<td>1</td>
-						<td>2</td>
-						<td>3</td>
-						<td>4</td>
-						<td>5</td>
-						<td>>></td>
+						<td><a href="/previousPageTransaction?page=${sessionScope.page -1}"><<</a></td>
+						<c:forEach var="i" begin="1" end="${nbrPages}">
+							<td><a href="?page=<c:out value="${i}"/>"><c:out value="${i}"/></a></td>
+						</c:forEach>
+						<td><a href="/nextPageTransaction?page=${sessionScope.page+1}">>></a></td>
 					</tr>
 				</tbody>
 			</table>
 		</div>
 	</section>
 	</c:if>
+	<%@ include file="../include/footer.jsp" %>
 	</body>
 </html>
