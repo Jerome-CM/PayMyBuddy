@@ -143,10 +143,7 @@ public class TransactionService implements TransactionServiceInt {
         } else {
             return new RedirectView("/transfert?status=errorNotMoney");
         }
-
-
     }
-
 
     @Override
     public boolean haveIEnoughMoney(String mail, double amount) {
@@ -160,9 +157,9 @@ public class TransactionService implements TransactionServiceInt {
     }
 
     @Override
-    public List<TransactionDTO> historyTransaction(long id) {
+    public List<TransactionDTO> historyTransaction(long id, int limitStart, int limitEnd) {
 
-        List<Transaction> listTransac = transactionRepository.findByIdUser(id);
+        List<Transaction> listTransac = transactionRepository.findByIdUser(id, limitStart, limitEnd);
 
         logger.info("List transac finded : {}", listTransac);
         List<TransactionDTO> listDTO = new ArrayList<>();
@@ -171,5 +168,36 @@ public class TransactionService implements TransactionServiceInt {
             listDTO.add(tDTO);
         }
         return listDTO;
+    }
+
+    @Override
+    public RedirectView previousPageTransaction(HttpServletRequest request) {
+        Integer page = Integer.parseInt(request.getParameter("page"));
+       /* if(request.getParameter("page") != null){
+            Integer page = Integer.parseInt(request.getParameter("page"));
+            logger.info("page recup : {}", page);
+            if(page > 1){
+                page = page - 1;
+                logger.info("page return : {}", page);
+                return new RedirectView("/transfert?page="+page);
+            } else {
+                return new RedirectView("/transfert");
+            }
+        } else {
+            return new RedirectView("/transfert");
+        }*/
+
+        return new RedirectView("/transfert?page="+page);
+    }
+
+    @Override
+    public RedirectView nextPageTransaction(HttpServletRequest request) {
+        Integer page = Integer.parseInt(request.getParameter("page"));
+      /*  Integer page = 0;
+        if(request.getParameter("page") != null){
+            page = Integer.parseInt(request.getParameter("page"));
+            page = page + 1;
+        }*/
+        return new RedirectView("/transfert?page="+page);
     }
 }

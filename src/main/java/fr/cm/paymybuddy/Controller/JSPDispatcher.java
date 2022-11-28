@@ -2,9 +2,12 @@ package fr.cm.paymybuddy.Controller;
 
 import antlr.ASTNULLType;
 import fr.cm.paymybuddy.DTO.FriendDTO;
+import fr.cm.paymybuddy.DTO.ProfilDTO;
 import fr.cm.paymybuddy.DTO.TransactionDTO;
+import fr.cm.paymybuddy.Model.Transaction;
 import fr.cm.paymybuddy.Model.User;
 
+import fr.cm.paymybuddy.Repository.TransactionRepository;
 import fr.cm.paymybuddy.Repository.UserRepository;
 import fr.cm.paymybuddy.Service.Implementation.TransactionService;
 import fr.cm.paymybuddy.Service.Interface.OtherServiceInt;
@@ -29,12 +32,19 @@ public class JSPDispatcher {
 	private static final Logger logger = LogManager.getLogger(JSPDispatcher.class);
 
 	private UserRepository userRepository;
+
+	private TransactionRepository transactionRepository;
 	private RelationServiceInt relationService;
 	private TransactionServiceInt transactionService;
 	private OtherServiceInt otherService;
 
-	public JSPDispatcher(UserRepository userRepository, TransactionServiceInt transactionService, RelationServiceInt relationService,OtherServiceInt otherService) {
+	@Autowired
+	ModelMapper modelMapper;
+
+
+	public JSPDispatcher(UserRepository userRepository, TransactionServiceInt transactionService, RelationServiceInt relationService,OtherServiceInt otherService,TransactionRepository transactionRepository) {
 		this.userRepository = userRepository;
+		this.transactionRepository = transactionRepository;
 		this.transactionService = transactionService;
 		this.relationService = relationService;
 		this.otherService = otherService;
@@ -73,7 +83,7 @@ public class JSPDispatcher {
 
 	@GetMapping("/transfert")
 	public String getTransfert(HttpServletRequest request, ModelMap map) {
-		String url = (String)request.getRequestURI();
+		String url = request.getRequestURI();
 		List<String> accessPath = otherService.accessPath(url);
 		map.addAttribute("accessPath", accessPath);
 
@@ -91,22 +101,53 @@ public class JSPDispatcher {
 		User me = userRepository.findByMail((String) session.getAttribute( "mail" ));
 		map.addAttribute("listMyFriends", relationService.getListOfMyFriends(me.getMail()));
 
-		map.addAttribute("listTransac", transactionService.historyTransaction(me.getId()));
+		int nbrTransactionPerPage = 3;
+		int limitStart = 0;
+		int limitEnd;
+		int totalNbrPage = (int)Math.ceil(transactionRepository.findAllByUserId(me.getId()).size() / nbrTransactionPerPage);
+
+
+		Integer requestPage = request.getParameter("page") != null?Integer.parseInt(request.getParameter("page")):0;
+		if(session.getAttribute("page") == null || Integer.parseInt(request.getParameter("page")) <= 1){
+			session.setAttribute("page", 1);
+		} else {
+			if(Integer.parseInt(request.getParameter("page")) >= totalNbrPage){
+
+			} else {
+				session.setAttribute("page", request.getParameter("page"));
+			}
+
+		}
+		logger.info("pageRequest sended {}", requestPage);
+		logger.info("total page {}", totalNbrPage);
+		if( requestPage == 0 || requestPage > totalNbrPage ) {
+			limitEnd = limitStart + nbrTransactionPerPage;
+		} else {
+			limitStart = (requestPage * nbrTransactionPerPage) - nbrTransactionPerPage;
+			limitEnd = (requestPage * nbrTransactionPerPage);
+		}
+		logger.info("Limit {},{}", limitStart, limitEnd);
+		map.addAttribute("nbrPages", totalNbrPage);
+		map.addAttribute("listTransac", transactionService.historyTransaction(me.getId(),limitStart,limitEnd));
 
 		return "transfert";
 	}
 
 	@GetMapping("/profile")
 	public String getProfile(HttpServletRequest request, ModelMap map) {
-		String url = (String)request.getRequestURI();
+		String url = request.getRequestURI();
 		List<String> accessPath = otherService.accessPath(url);
 		map.addAttribute("accessPath", accessPath);
 
 		HttpSession session = request.getSession();
-		String myMail = (String) session.getAttribute( "mail" );
+		User me = userRepository.findByMail((String) session.getAttribute( "mail" ));
 
-		map.addAttribute("userBalance", userRepository.findByMail(myMail).getAccountBalance());
-		map.addAttribute("listMyFriends", relationService.getListOfMyFriends(myMail));
+		ProfilDTO profileDTO = new ProfilDTO();
+		profileDTO = modelMapper.map(me, ProfilDTO.class);
+
+		map.addAttribute("userTest", relationService.testGetProfileDTO(me));
+		map.addAttribute("userBalance", userRepository.findByMail(me.getMail()).getAccountBalance());
+		map.addAttribute("listMyFriends", relationService.getListOfMyFriends(me.getMail()));
 		return "profile";
 	}
 

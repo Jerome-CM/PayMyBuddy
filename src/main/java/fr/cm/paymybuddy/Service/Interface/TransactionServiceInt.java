@@ -15,6 +15,11 @@ public interface TransactionServiceInt {
     public RedirectView sendMoney(HttpServletRequest request);
 
     public boolean haveIEnoughMoney(String mail, double amount);
-    public List<TransactionDTO> historyTransaction(long id);
+
+    public List<TransactionDTO> historyTransaction(long id, int limitStart, int limitEnd);
+
+    public RedirectView previousPageTransaction(HttpServletRequest request);
+
+    public RedirectView nextPageTransaction(HttpServletRequest request);
 
 }
