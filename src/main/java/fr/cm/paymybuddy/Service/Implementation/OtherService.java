@@ -4,6 +4,7 @@ import fr.cm.paymybuddy.Service.Interface.OtherServiceInt;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
+import org.springframework.web.servlet.view.RedirectView;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
@@ -54,7 +55,8 @@ public class OtherService implements OtherServiceInt {
     }
 
     @Override
-    public boolean sendContactMessage(HttpServletRequest request) {
-        return false;
+    public RedirectView sendContactMessage(HttpServletRequest request) {
+
+        return new RedirectView("/contact?status=sentMessage");
     }
 }

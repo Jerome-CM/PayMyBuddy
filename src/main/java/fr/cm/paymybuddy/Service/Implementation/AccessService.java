@@ -54,7 +54,7 @@ public class AccessService implements AccessServiceInt {
 					user.setMail(mail);
 					user.setPassword(passwordEncoder.encode(mdp));
 
-					User user = userRepository.save(user);
+					user = userRepository.save(user);
 					logger.info("New User create {}", user);
 					HttpSession session = request.getSession();
 					session.setAttribute("mail", mail);

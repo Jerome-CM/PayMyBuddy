@@ -213,6 +213,14 @@ public class JSPDispatcher {
 		List<String> accessPath = otherService.accessPath(url);
 		map.addAttribute("accessPath", accessPath);
 
+		HttpSession session = request.getSession();
+		if(request.getParameter("status") != null) {
+			String statusType = request.getParameter("status");
+
+			if (statusType.equals("sentMessage")) {
+				session.setAttribute("notification", "Your message as been send");
+			}}
+
 		return "contact";
 	}
 
