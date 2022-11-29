@@ -1,7 +1,6 @@
 package fr.cm.paymybuddy.Controller;
 
-import fr.cm.paymybuddy.Service.Interface.AccesServiceInt;
-import org.springframework.beans.factory.annotation.Autowired;
+import fr.cm.paymybuddy.Service.Interface.AccessServiceInt;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -12,9 +11,9 @@ import javax.servlet.http.HttpServletRequest;
 @RestController
 public class Connexion {
 
-    private AccesServiceInt accesService;
+    private AccessServiceInt accesService;
 
-    public Connexion(AccesServiceInt accesService){
+    public Connexion(AccessServiceInt accesService){
         this.accesService = accesService;
     }
 

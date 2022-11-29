@@ -3,22 +3,14 @@ package fr.cm.paymybuddy.Utility;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import fr.cm.paymybuddy.Model.User;
-import fr.cm.paymybuddy.Repository.UserRepository;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import static java.util.Objects.isNull;
-import static org.apache.logging.log4j.ThreadContext.isEmpty;
 
 @Service
 public class Utility {
 
     private static final Logger logger = LogManager.getLogger(Utility.class);
-    @Autowired
-    UserRepository userRepository;
 
     public static <T> T jsonDecode(String json, Class<T> tClass) {
         ObjectMapper mapper = new ObjectMapper();
@@ -44,12 +36,10 @@ public class Utility {
         }
     }
 
-
     public static double stringCommaToDoublePoint(String amount){
 
         String point = amount.replace(",", ".");
         return Double.parseDouble(point);
-
 
     }
 }

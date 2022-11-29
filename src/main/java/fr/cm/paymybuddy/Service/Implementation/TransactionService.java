@@ -1,8 +1,6 @@
 package fr.cm.paymybuddy.Service.Implementation;
 
 import fr.cm.paymybuddy.DTO.TransactionDTO;
-import fr.cm.paymybuddy.DTO.TransfertDTO;
-import fr.cm.paymybuddy.DTO.UserDTO;
 import fr.cm.paymybuddy.Model.Transaction;
 import fr.cm.paymybuddy.Model.User;
 import fr.cm.paymybuddy.Model.TypeStatus;
@@ -14,13 +12,11 @@ import fr.cm.paymybuddy.Utility.Utility;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.view.RedirectView;
-
 import javax.servlet.http.HttpServletRequest;
+import javax.transaction.Transactional;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Service
@@ -28,23 +24,28 @@ public class TransactionService implements TransactionServiceInt {
 
     private static final Logger logger = LogManager.getLogger(TransactionService.class);
 
-    @Autowired
-    TransactionRepository transactionRepository;
+    private TransactionRepository transactionRepository;
+    private UserRepository userRepository;
 
-    @Autowired
-    UserRepository userRepository;
+    private ModelMapper modelMapper;
 
-    @Autowired
-    ModelMapper modelMapper;
+    public TransactionService(TransactionRepository transactionRepository, UserRepository userRepository, ModelMapper modelMapper){
+        this.transactionRepository=transactionRepository;
+        this.userRepository=userRepository;
+        this.modelMapper=modelMapper;
+    }
 
     @Override
+    @Transactional
     public RedirectView refundAccount(HttpServletRequest request) {
+
+        logger.info("--- Method refundAccount ---");
 
         double amount = Utility.stringCommaToDoublePoint(request.getParameter("amount"));
         String description = request.getParameter("description");
         String mail = request.getParameter("mail_hidden");
 
-        logger.info("Data send from form : {} {} {}", amount, description, mail);
+        logger.info("Refund request : {}€ {} {}", amount, description, mail);
         // table Users
         User user = userRepository.findByMail(mail);
         double userBalanceBefore = user.getAccountBalance();
@@ -77,7 +78,7 @@ public class TransactionService implements TransactionServiceInt {
         t.setSoldBeforeTransaction(userBalanceBefore);
         t.setSoldAfterTransaction(userBalanceAfter);
 
-        logger.info("Object Transaction create with setters : {}", t);
+        logger.info("Object Transaction ready to be save : {}", t);
 
         listTransac.add(t);
         user.setTransactions(listTransac);
@@ -87,7 +88,7 @@ public class TransactionService implements TransactionServiceInt {
         try {
             userRepository.save(user);
             transactionRepository.save(t);
-            logger.info("Transaction save in BDD ");
+            logger.info("Transaction save in BDD, user balance updated ");
             return new RedirectView("/profile?status=successRefund&amount="+ amount);
         } catch (Exception e) {
             logger.info("Error : {}", e.getMessage());
@@ -97,19 +98,26 @@ public class TransactionService implements TransactionServiceInt {
     }
 
     @Override
+    @Transactional
     public RedirectView sendMoney(HttpServletRequest request) {
+
+        logger.info("--- Method sendMoney ---");
+
         User me = userRepository.findByMail(request.getParameter("mail_hidden"));
         String mailFriend = request.getParameter("mailFriend");
         double amount = Double.parseDouble(request.getParameter("amount"));
         String description = request.getParameter("description");
 
+        logger.info("Refund request : {}€ {} {}", amount, description, mailFriend);
+
         if(mailFriend.equals("choose")) {
+            logger.info("errorChooseEmpty");
             return new RedirectView("/transfert?status=errorChooseEmpty");
         } else if (amount < 1){
+            logger.info("errorLittleAmount");
             return new RedirectView("/transfert?status=errorLittleAmount");
         } else if(haveIEnoughMoney(me.getMail(),amount)){
             List<Transaction> listTransac = me.getTransactions();
-            logger.info("Transaction list : {}", listTransac);
 
             User friend = userRepository.findByMail(mailFriend);
             Transaction t = new Transaction();
@@ -121,7 +129,7 @@ public class TransactionService implements TransactionServiceInt {
             t.setStatus(TypeStatus.Waiting);
             t.setSoldBeforeTransaction(me.getAccountBalance());
             t.setSoldAfterTransaction(me.getAccountBalance() - amount);
-            logger.info("Object Transaction create with setters : {}", t);
+            logger.info("Object Transaction ready to be save : {}", t);
 
             listTransac.add(t);
             me.setTransactions(listTransac);
@@ -133,7 +141,7 @@ public class TransactionService implements TransactionServiceInt {
                 userRepository.save(me);
                 userRepository.save(friend);
                 transactionRepository.save(t);
-                logger.info("Transaction save in BDD ");
+                logger.info("Transaction save in BDD, users balances updated ");
                 return new RedirectView("/transfert?status=successTransfer&amount="+ amount+"&friend="+friend.getFirstname());
             } catch (Exception e) {
                 logger.info("Error : {}", e.getMessage());
@@ -147,6 +155,9 @@ public class TransactionService implements TransactionServiceInt {
 
     @Override
     public boolean haveIEnoughMoney(String mail, double amount) {
+
+        logger.info("--- Method haveIEnoughMoney ---");
+
         double myAmount = userRepository.findByMail(mail).getAccountBalance();
 
         if(myAmount >= amount){
@@ -159,14 +170,17 @@ public class TransactionService implements TransactionServiceInt {
     @Override
     public List<TransactionDTO> historyTransaction(long id, int limitStart, int limitEnd) {
 
+        logger.info("--- Method historyTransaction ---");
+
         List<Transaction> listTransac = transactionRepository.findByIdUser(id, limitStart, limitEnd);
 
-        logger.info("List transac finded : {}", listTransac);
+        // logger.info("Transactions list finded : {}", listTransac);
         List<TransactionDTO> listDTO = new ArrayList<>();
         for ( Transaction transaction: listTransac) {
             TransactionDTO tDTO = modelMapper.map(transaction, TransactionDTO.class);
             listDTO.add(tDTO);
         }
+        logger.info("Transactions history list returned : {}", listDTO);
         return listDTO;
     }
 

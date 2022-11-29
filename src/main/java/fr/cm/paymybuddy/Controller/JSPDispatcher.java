@@ -1,29 +1,19 @@
 package fr.cm.paymybuddy.Controller;
 
-import antlr.ASTNULLType;
-import fr.cm.paymybuddy.DTO.FriendDTO;
-import fr.cm.paymybuddy.DTO.ProfilDTO;
-import fr.cm.paymybuddy.DTO.TransactionDTO;
-import fr.cm.paymybuddy.Model.Transaction;
-import fr.cm.paymybuddy.Model.User;
 
+import fr.cm.paymybuddy.Model.User;
 import fr.cm.paymybuddy.Repository.TransactionRepository;
 import fr.cm.paymybuddy.Repository.UserRepository;
-import fr.cm.paymybuddy.Service.Implementation.TransactionService;
 import fr.cm.paymybuddy.Service.Interface.OtherServiceInt;
 import fr.cm.paymybuddy.Service.Interface.RelationServiceInt;
 import fr.cm.paymybuddy.Service.Interface.TransactionServiceInt;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -36,10 +26,6 @@ public class JSPDispatcher {
 	private RelationServiceInt relationService;
 	private TransactionServiceInt transactionService;
 	private OtherServiceInt otherService;
-
-	@Autowired
-	ModelMapper modelMapper;
-
 
 	public JSPDispatcher(UserRepository userRepository, TransactionServiceInt transactionService, RelationServiceInt relationService,OtherServiceInt otherService,TransactionRepository transactionRepository) {
 		this.userRepository = userRepository;
@@ -176,6 +162,8 @@ public class JSPDispatcher {
 				session.setAttribute("notification", "The refund is impossible");
 			} else if (statusType.equals("successRefund")) {
 				session.setAttribute("notification", "Your account is reloaded now with "+ request.getParameter("amount") +"€");
+			} else if (statusType.equals("successRemove")) {
+				session.setAttribute("notification", "This friend is deleted in your friend list");
 			}
 		}
 
@@ -214,7 +202,6 @@ public class JSPDispatcher {
 
 		map.addAttribute("listUsers", relationService.getAllUserWithoutMe(me.getMail()));
 		map.addAttribute("listMyFriends", relationService.getProfileDTO(me));
-
 		return "addFriend";
 	}
 

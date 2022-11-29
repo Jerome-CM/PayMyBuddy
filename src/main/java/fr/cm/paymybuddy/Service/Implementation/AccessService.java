@@ -1,49 +1,47 @@
 package fr.cm.paymybuddy.Service.Implementation;
 
-import fr.cm.paymybuddy.Controller.JSPDispatcher;
 import fr.cm.paymybuddy.Model.User;
 import fr.cm.paymybuddy.Repository.UserRepository;
-import fr.cm.paymybuddy.Service.Interface.AccesServiceInt;
-import fr.cm.paymybuddy.Utility.Utility;
+import fr.cm.paymybuddy.Service.Interface.AccessServiceInt;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.view.RedirectView;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.util.Date;
+
 
 @Service
-public class AccessService implements AccesServiceInt {
+public class AccessService implements AccessServiceInt {
 
 	private static final Logger logger = LogManager.getLogger(AccessService.class);
-	@Autowired
+
 	private UserRepository userRepository;
 
-	@Autowired
-	PasswordEncoder passwordEncoder;
+	private PasswordEncoder passwordEncoder;
 
-	@Autowired
-	Utility utility;
+	public AccessService(UserRepository userRepository,PasswordEncoder passwordEncoder){
+		this.userRepository=userRepository;
+		this.passwordEncoder=passwordEncoder;
+	}
 
     @Override
     public RedirectView login(HttpServletRequest request) {
 
+		logger.info("--- Method login ---");
+
 		String mail = request.getParameter("mail");
 		String mdp = request.getParameter("password");
 
-		logger.info("Data from login - mail : {} password : {}", mail, mdp );
+		logger.info("Data from login - Mail : {} Password : {}", mail, mdp );
 
 		try{
 			if(this.isUserExist((mail))){
 
 				HttpSession session = request.getSession();
 				session.setAttribute("mail", mail);
-
+				logger.info("User connected - Mail : {} ", mail );
 				return new RedirectView("/transfert");
 			} else {
 				if (mdp.isEmpty()) {
@@ -56,8 +54,8 @@ public class AccessService implements AccesServiceInt {
 					user.setMail(mail);
 					user.setPassword(passwordEncoder.encode(mdp));
 
-					userRepository.save(user);
-
+					User user = userRepository.save(user);
+					logger.info("New User create {}", user);
 					HttpSession session = request.getSession();
 					session.setAttribute("mail", mail);
 
@@ -73,27 +71,28 @@ public class AccessService implements AccesServiceInt {
     @Override
     public RedirectView logout(HttpServletRequest request) {
 
-		HttpSession session = request.getSession();
-		session.invalidate();
+		logger.info("--- Method logout ---");
 
-		return new RedirectView("/home?status=disconnected");
+		HttpSession session = request.getSession();
+		User user = userRepository.findByMail((String)request.getAttribute("mail"));
+		session.invalidate();
+		logger.info("User disconnected - {}", user.getMail());
+		return new RedirectView("/login?status=disconnected");
     }
 
 	public boolean isUserExist(String mail){
 
+		logger.info("--- Method isUserExist ---");
+
 		User user = userRepository.findByMail(mail);
-		logger.info("user finded : {}", user);
+
 		if(user == null){
+			logger.info("User not found during connection request");
 			return false;
 		} else {
+			logger.info("User finded during connection request : {}", user);
 			return true;
 		}
 	}
 
-	public long idUser(String mail){
-
-		long id = userRepository.findByMail(mail).getId();
-
-		return id;
-	}
 }

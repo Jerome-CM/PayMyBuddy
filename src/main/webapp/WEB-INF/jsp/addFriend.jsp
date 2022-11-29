@@ -34,7 +34,7 @@
 		        </tr>
 		    </thead>
 		    <tbody>
-			<c:forEach items="${listMyFriends}" var="friend">
+			<c:forEach items="${listMyFriends.getListFriends()}" var="friend">
 		    	<tr>
 		            <td><c:out value="${friend.firstname}"/></td>
 		            <td><c:out value="${friend.lastname}"/></td>

@@ -27,7 +27,7 @@ public class User extends Model{
     @ManyToMany
     List<User> friends = new ArrayList<>();
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", fetch=FetchType.LAZY)
     List<Transaction> transactions = new ArrayList<>();
 
 }

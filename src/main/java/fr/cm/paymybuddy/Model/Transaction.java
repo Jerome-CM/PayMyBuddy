@@ -1,6 +1,8 @@
 package fr.cm.paymybuddy.Model;
 
 import lombok.Data;
+import lombok.ToString;
+
 import javax.persistence.*;
 
 @Data
@@ -18,10 +20,10 @@ public class Transaction extends Model{
     private String description;
 
     @JoinColumn(name = "user", nullable = false)
-    @ManyToOne
+    @ManyToOne @ToString.Exclude
     private User user;
 
-    @ManyToOne
+    @ManyToOne @ToString.Exclude
     private User userFriend;
 
     @Column(name="type_transaction")

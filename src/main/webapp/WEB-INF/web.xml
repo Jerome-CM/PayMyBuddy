@@ -8,4 +8,5 @@
         </jsp-property-group>
     </jsp-config>
 </web-app>
-<mvc:resources mapping="/resources/**" location="/resources/"/>
+<mvc:annotation-driven />
+<mvc:resources mapping="/resources/**" location="/resources/" />

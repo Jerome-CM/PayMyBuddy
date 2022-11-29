@@ -1,6 +1,5 @@
 package fr.cm.paymybuddy.Repository;
 
-import fr.cm.paymybuddy.DTO.TransactionDTO;
 import fr.cm.paymybuddy.Model.Transaction;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
