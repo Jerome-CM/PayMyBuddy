@@ -43,28 +43,33 @@ public class RelationService implements RelationServiceInt {
         String lastname = request.getParameter("lastname");
         String mail = request.getParameter("mail");
 
-        logger.info("Complete registration - firstname : {} lastname : {} for mail : {}", firstname, lastname, mail );
+        if(!firstname.isEmpty() && !lastname.isEmpty()){
 
-        User user = userRepository.findByMail(mail);
-        logger.info("User infos before registration : {}", user);
-        if(!user.getPassword().isEmpty()){
+            logger.info("Complete registration - firstname : {} lastname : {} for mail : {}", firstname, lastname, mail );
 
-            user.setFirstname(firstname);
-            user.setLastname(lastname);
-            user.setDateModification(new Date());
-            user.setId(user.getId());
+            User user = userRepository.findByMail(mail);
+            logger.info("User infos before registration : {}", user);
+            if(!user.getPassword().isEmpty()){
 
-            try{
-                userRepository.save(user);
-                logger.info("User infos update : {}", user);
-                return new RedirectView("/transfert?status=successRegister");
-            } catch(Exception e){
-                logger.error("Impossible to register the news informations : {}", e.getMessage());
-                return new RedirectView("/register?status=errorUpdateUser");
+                user.setFirstname(firstname);
+                user.setLastname(lastname);
+                user.setDateModification(new Date());
+                user.setId(user.getId());
+
+                try{
+                    userRepository.save(user);
+                    logger.info("User infos update : {}", user);
+                    return new RedirectView("/transfert?status=successRegister");
+                } catch(Exception e){
+                    logger.error("Impossible to register the news informations : {}", e.getMessage());
+                    return new RedirectView("/register?status=errorUpdateUser");
+                }
+            } else {
+                logger.error("User not finded for update");
+                return new RedirectView("/login?status=errorFindedUser");
             }
         } else {
-            logger.error("User not finded for update");
-            return new RedirectView("/login?status=errorFindedUser");
+            return new RedirectView("/register?status=errorInputEmpty");
         }
     }
 

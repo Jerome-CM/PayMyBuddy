@@ -60,6 +60,8 @@ public class JSPDispatcher {
 
 			if (statusType.equals("errorUpdateUser")) {
 				session.setAttribute("notification", "Update yours informations is impossible");
+			} else if (statusType.equals("errorInputEmpty")){
+				session.setAttribute("notification", "Please complete all fields");
 			}
 		}
 		return "register";
