@@ -1,7 +1,7 @@
 <%@ taglib prefix="input" uri="http://www.springframework.org/tags/form" %>
 
 <%@ include file="../include/header.jsp" %>
-        <title>dashboard</title>
+        <title>Transfer</title>
     </head>
     <body>
     
@@ -13,7 +13,7 @@
 				<a class="btn" href="/addFriend">Add Connection</a>
 			</div>
 			<div class="control_money">
-				<form method="POST" action="/sendMoney" class="container_money">
+				<form method="POST" action="/sendMoney" class="container_money command_send_money">
 					<select name="mailFriend">
 						<option value="">Choose a connection</option>
 						<c:forEach items="${ userDTO.listFriends }" var="user">

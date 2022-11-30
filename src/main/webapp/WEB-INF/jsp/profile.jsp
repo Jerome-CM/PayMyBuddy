@@ -1,5 +1,5 @@
 <%@ include file="../include/header.jsp" %>
-        <title>Add a friend</title>
+        <title>Profile</title>
     </head>
     <body>
     <%@ include file="../include/menu.jsp" %>
@@ -73,7 +73,7 @@
 					<td><c:out value="${friend.firstname}"/></td>
 					<td><c:out value="${friend.lastname}"/></td>
 					<td><c:out value="${friend.mail}"/></td>
-					<td><a href="/deleteFriend?friend=<c:out value="${friend.mail}"/>">X</a></td>
+					<td><a class="btn_delete_friend" href="/deleteFriend?friend=<c:out value="${friend.mail}"/>"><img src="/CSS/img/cross.png" alt="Croix de suppression"></a></td>
 				</tr>
 			</c:forEach>
 			</tbody>

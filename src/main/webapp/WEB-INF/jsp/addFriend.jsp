@@ -18,7 +18,7 @@
 						</c:forEach>
 					</select>
 					<input type="hidden" name="mail_hidden" value="${sessionScope.mail}">
-					<input type="submit" value="Save" name="submit" class="btn btn_pay">
+					<input type="submit" value="Add" name="submit" class="btn btn_pay">
 				</form>
 			</div>
 	</section>

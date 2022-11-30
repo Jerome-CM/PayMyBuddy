@@ -1,5 +1,5 @@
 <%@ include file="../include/header.jsp" %>
-        <title>Add a friend</title>
+        <title>Contact</title>
     </head>
     <body>
     

@@ -14,46 +14,40 @@ html, body{
 .form_container{
 	width: 30%;
     margin: 0% auto 0 auto;
-    transform: translateY(50%);
+    transform: translateY(45%);
     text-align: center;
     border: 2px solid lightgrey;
     border-radius: 10px;
 }
 
 h1{
-	
-	
 	font-size:25px;
 	color:white;
-	padding:7px;
+	padding:7px 17px;
 	background: linear-gradient(to right, #5AAD4F, #86B93C);
 	border-radius:5px;
 }
 
 .h1_form{
-	width:30%;
+	width:41%;
 	margin: 20px auto;
 }
 
-input{
-	width:80%;
-	border-radius:5px;
-	border:1px solid lightgrey;
-	padding: 15px 5px 15px 3px;
-	margin: 20px auto;
-	
+.form-login input[type=email],input[type=password]{
+	background-repeat: no-repeat;
+	background-size: 24px;
+	background-position-x: 5px;
+	background-position-y: 11px;
+	padding: 15px 0px 15px 60px;
+	width: 60%;
 }
 
-input[type=password]{
-	background-image: url('CSS/img/star.png');
-    background-repeat: no-repeat;
+.form-login input[type=password]{
+	background-image: url('/CSS/img/star.png');
 }
 
-input[type=text]{
-	background-image: url('CSS/img/enveloppe.png');
-    background-repeat: no-repeat;
-    background-size:30px;
-    background-origin: content-box;
+.form-login input[type=email]{
+	background-image: url('/CSS/img/enveloppe.png');
 }
 
 .remember{
@@ -86,12 +80,33 @@ input[type=text]{
 	text-decoration:none;
 	cursor:pointer;
 }
+/************\
+Notifications
+\************/
+.notification{
+	width: 100%;
+	height: 25px;
+	background-color: #2b71ff;
+	color: whitesmoke;
+	text-align: center;
+	font-size: 20px;
+	padding: 6px 0 7px 0;
+}
 
 /************\
  finalRegister
 \************/
 .container_input_label{
 	width:33%
+}
+
+input{
+	width:35%;
+	border-radius:5px;
+	border:1px solid lightgrey;
+	padding: 15px 5px 15px 3px;
+	margin: 20px auto;
+
 }
 
 /************\
@@ -107,7 +122,7 @@ nav{
 
 nav h1{
 	width:auto;
-	margin: 3px;
+	margin: 3px 3px 3px 6px;
 }
 
 nav ul{
@@ -129,21 +144,29 @@ nav ul li a{
 	font-size:25px;
 }
 
+.section_path{
+	width: 100%;
+	padding: 0;
+	margin: 0;
+	font-size: 22px;
+	background-color: #f5f5f5;
+}
+
+.content_access_path{
+	padding: 10px 20px;
+	color: #006dbe;
+}
+
+.content_access_path span:nth-last-child(1){
+	color: #b3b3b3;
+}
+
+.span_access_path{
+	padding-right: 10px;
+}
 /************\
   Transfert
 \************/
-
-.path{
-	background-color:#f5f5f5;
-	padding:5px 0 5px 10px;
-}
-
-.path span{
-	margin:5px 15px;
-	padding:5px 0;
-	font-size:25px;
-	text-transform:bold;
-}
 
 section{
 	width:60%;
@@ -163,12 +186,13 @@ section{
 	padding:7px 25px;
 }
 
-.container_money{
-	width:70%;
-	height:45px;
-	margin:auto auto;	
-	display:flex;
-	align-items:center;
+.container_money {
+	width: 90%; /*70%*/
+	height: 45px;
+	margin: auto auto;
+	display: flex;
+	align-items: center;
+	justify-content: space-around; /* */
 }
 
 .container_money p{
@@ -191,10 +215,11 @@ section{
 	height:100%;
 	border:1px solid black;
 	padding: 0 5px;
+	margin-right: auto;
 }
 
 .control_money input[type=number]{
-	width:30%;
+	width:10%;
 	height:100%;
 	border:1px solid black;
 	border-radius:0;
@@ -205,11 +230,14 @@ section{
 input[type=number]::-webkit-inner-spin-button,
       input[type=number]::-webkit-outer-spin-button {
         opacity: 1;
+}
 
-      }
+.control_money input[type=text]{
+	width:35%;
+}
 
 .control_money input[type=submit]{
-	width:30%;
+	width:16.5%;
 	height:100%;
 }
 
@@ -317,6 +345,19 @@ background-color: #f5f5f5;
 	width:70%;
 }
 
+.btn_delete_friend{
+	width: 30px;
+	height: 30px;
+	background-color: red;
+	padding: 2px 6px 2px 6px;
+	text-decoration: none;
+	border-radius: 3px;
+}
+.btn_delete_friend img{
+	width: 15px;
+	height: 15px;
+	position: relative;
+}
 /************\
   addFriend
 \************/
@@ -343,6 +384,10 @@ background-color: #f5f5f5;
 
 .contact{
 	height:100%;
+}
+
+.contact input[type=text]{
+	width: 82%;
 }
 
 textarea {
