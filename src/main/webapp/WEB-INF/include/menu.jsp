@@ -8,7 +8,11 @@
 		<li><a href="/transfert">Transfer</a></li>
 		<li><a href="/profile">Profile</a></li>
 		<li><a href="/contact">Contact</a></li>
-		<li><a href="/home">Logout</a></li>
+		<c:choose>
+			<c:when test="${!empty sessionScope.mail}"><li><a href="/logout">Logout</a></li></c:when>
+			<c:when test="${empty sessionScope.mail}"><li><a href="/login">Login</a></li></c:when>
+		</c:choose>
+
 	</ul>
 </nav>
 <section class="section_path">

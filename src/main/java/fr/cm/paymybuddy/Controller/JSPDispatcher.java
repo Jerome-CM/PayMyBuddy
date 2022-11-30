@@ -73,6 +73,16 @@ public class JSPDispatcher {
 		String url = (String)request.getRequestURI();
 		List<String> accessPath = otherService.accessPath(url);
 		map.addAttribute("accessPath", accessPath);
+
+		HttpSession session = request.getSession();
+		if(request.getParameter("status") != null) {
+			String statusType = request.getParameter("status");
+
+			if (statusType.equals("disconnected")) {
+				session.setAttribute("notification", "You are logout");
+			}
+		}
+
 		return "home";
 	}
 

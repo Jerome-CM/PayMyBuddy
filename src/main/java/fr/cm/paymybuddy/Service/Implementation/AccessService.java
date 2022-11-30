@@ -74,10 +74,10 @@ public class AccessService implements AccessServiceInt {
 		logger.info("--- Method logout ---");
 
 		HttpSession session = request.getSession();
-		User user = userRepository.findByMail((String)request.getAttribute("mail"));
+		User user = userRepository.findByMail((String) session.getAttribute("mail"));
 		session.invalidate();
 		logger.info("User disconnected - {}", user.getMail());
-		return new RedirectView("/login?status=disconnected");
+		return new RedirectView("/home?status=disconnected");
     }
 
 	public boolean isUserExist(String mail){
