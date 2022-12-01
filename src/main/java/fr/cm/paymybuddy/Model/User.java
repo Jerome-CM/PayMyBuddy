@@ -1,8 +1,11 @@
 package fr.cm.paymybuddy.Model;
 
 import lombok.Data;
+import org.springframework.security.core.GrantedAuthority;
+
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 @Data
@@ -20,6 +23,8 @@ public class User extends Model{
 
     private String mail;
     private String password;
+
+    private String role="user";
 
     @Column(name="account_balance")
     private double accountBalance = 0.00;

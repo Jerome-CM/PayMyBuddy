@@ -1,6 +1,7 @@
 package fr.cm.paymybuddy.Controller;
 
 
+import fr.cm.paymybuddy.Model.Transaction;
 import fr.cm.paymybuddy.Model.User;
 import fr.cm.paymybuddy.Repository.TransactionRepository;
 import fr.cm.paymybuddy.Repository.UserRepository;
@@ -70,8 +71,8 @@ public class JSPDispatcher {
 
 	@GetMapping("/home")
 	public String getHome(HttpServletRequest request, ModelMap map) {
-		String url = (String)request.getRequestURI();
-		List<String> accessPath = otherService.accessPath(url);
+
+		List<String> accessPath = otherService.accessPath((String)request.getRequestURI());
 		map.addAttribute("accessPath", accessPath);
 
 		HttpSession session = request.getSession();
@@ -88,8 +89,8 @@ public class JSPDispatcher {
 
 	@GetMapping("/transfert")
 	public String getTransfert(HttpServletRequest request, ModelMap map) {
-		String url = request.getRequestURI();
-		List<String> accessPath = otherService.accessPath(url);
+
+		List<String> accessPath = otherService.accessPath((String)request.getRequestURI());
 		map.addAttribute("accessPath", accessPath);
 
 		HttpSession session = request.getSession();
@@ -145,7 +146,7 @@ public class JSPDispatcher {
 			limitStart = (requestPage * nbrTransactionPerPage) - nbrTransactionPerPage;
 			limitEnd = nbrTransactionPerPage;
 		}
-		
+
 		logger.info("Limit {},{}", limitStart, limitEnd);
 		map.addAttribute("nbrPages", totalNbrPage);
 		map.addAttribute("listTransacDTO", transactionService.historyTransaction(me.getId(),limitStart,limitEnd));
@@ -179,8 +180,8 @@ public class JSPDispatcher {
 			}
 		}
 
-		String url = request.getRequestURI();
-		List<String> accessPath = otherService.accessPath(url);
+
+		List<String> accessPath = otherService.accessPath((String)request.getRequestURI());
 		map.addAttribute("accessPath", accessPath);
 
 
@@ -192,8 +193,8 @@ public class JSPDispatcher {
 
 	@GetMapping("/addFriend")
 	public String getAddFriend(HttpServletRequest request, ModelMap map) {
-		String url = (String)request.getRequestURI();
-		List<String> accessPath = otherService.accessPath(url);
+
+		List<String> accessPath = otherService.accessPath((String)request.getRequestURI());
 		map.addAttribute("accessPath", accessPath);
 
 		HttpSession session = request.getSession();
@@ -219,8 +220,8 @@ public class JSPDispatcher {
 
 	@GetMapping("/contact")
 	public String getContact(HttpServletRequest request, ModelMap map) {
-		String url = (String)request.getRequestURI();
-		List<String> accessPath = otherService.accessPath(url);
+
+		List<String> accessPath = otherService.accessPath((String)request.getRequestURI());
 		map.addAttribute("accessPath", accessPath);
 
 		HttpSession session = request.getSession();
@@ -232,6 +233,36 @@ public class JSPDispatcher {
 			}}
 
 		return "contact";
+	}
+
+	@GetMapping("/admin/manage")
+	public String getManage(HttpServletRequest request, ModelMap map) {
+
+		List<String> accessPath = otherService.accessPath((String)request.getRequestURI());
+		map.addAttribute("accessPath", accessPath);
+
+		List<User> userList = (List<User>) userRepository.findAll();
+		List<Transaction> transacList = (List<Transaction>) transactionRepository.findAll();
+
+		double totalMoney = 0;
+		double totalWallet = 0;
+
+		for(Transaction transa : transacList){
+			if(!transa.getUser().equals(transa.getUserFriend())){
+				totalMoney += transa.getAmount();
+			}
+		}
+
+		for(User user : userList){
+			totalWallet += user.getAccountBalance();
+		}
+
+		map.addAttribute("nbrUsers", userList.size());
+		map.addAttribute("nbrTransactions", transacList.size());
+		map.addAttribute("totalMoney", totalMoney);
+		map.addAttribute("moneyInWallet", totalWallet);
+
+		return "manage";
 	}
 
 }

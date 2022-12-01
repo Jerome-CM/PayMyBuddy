@@ -29,9 +29,9 @@ public class PaymybuddyApplication implements CommandLineRunner {
 	@Bean
 	public UserDetailsService userDetailsService(PasswordEncoder passwordEncoder) {
 	    InMemoryUserDetailsManager manager = new InMemoryUserDetailsManager();
-	    manager.createUser(User.withUsername("admin")
+	    manager.createUser(User.withUsername("bouteveillejerome@hotmail.fr")
 	      .password(passwordEncoder.encode("adminPass"))
-	      .roles("USER", "ADMIN")
+	      .roles("ADMIN")
 	      .build());
 	    return manager;
 	}

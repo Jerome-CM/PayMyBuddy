@@ -1,4 +1,4 @@
-package fr.cm.paymybuddy.Config;
+package fr.cm.paymybuddy.Config.Security;
 
 import org.springframework.security.web.context.AbstractSecurityWebApplicationInitializer;
 
