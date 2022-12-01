@@ -332,6 +332,12 @@ background-color: #f5f5f5;
 	padding:10px 13px;
 }
 
+.pages{
+	text-decoration: none;
+	color: blue;
+	border: none!important;
+}
+
 /************\
    Profile
 \************/

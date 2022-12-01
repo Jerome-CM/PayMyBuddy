@@ -52,11 +52,11 @@
 			<table>
 				<tbody>
 					<tr>
-						<td><a href="/previousPageTransaction?page=${sessionScope.page -1}"><<</a></td>
+						<c:if test="${sessionScope.page > 1}"><td><a class="pages" href="/previousPageTransaction?page=${sessionScope.page -1}"><<</a></td></c:if>
 						<c:forEach var="i" begin="1" end="${nbrPages}">
-							<td><a href="?page=<c:out value="${i}"/>"><c:out value="${i}"/></a></td>
+							<td><a class="pages" href="?page=<c:out value="${i}"/>"><c:out value="${i}"/></a></td>
 						</c:forEach>
-						<td><a href="/nextPageTransaction?page=${sessionScope.page+1}">>></a></td>
+						<c:if test="${sessionScope.page < nbrPages}"><td><a class="pages" href="/previousPageTransaction?page=${sessionScope.page +1}">>></a></td></c:if>
 					</tr>
 				</tbody>
 			</table>

@@ -114,38 +114,38 @@ public class JSPDispatcher {
 		User me = userRepository.findByMail((String) session.getAttribute( "mail" ));
 		map.addAttribute("userDTO", relationService.getProfileDTO(me));
 
+
+		// Pagination config
 		int nbrTransactionPerPage = 3;
 		int limitStart = 0;
 		int limitEnd;
 		int totalNbrPage = (int)Math.ceil(transactionRepository.findAllByUserId(me.getId()).size() / nbrTransactionPerPage);
-
 		Integer requestPage = 0;
-		// Initialize pagination
-		if(request.getParameter("page") == null && session.getAttribute("page") == null){
-			session.setAttribute("page", 1);
-			requestPage = 0;
-		// Current page
-		} else if (request.getParameter("page") != null && session.getAttribute("page") != null){
-			requestPage = Integer.valueOf(request.getParameter("page"));
-			session.setAttribute("page", requestPage);
-		// Exception
-		} else if (request.getParameter("page") != null && Integer.valueOf(request.getParameter("page")) > totalNbrPage){
+
+		// Exceptions
+		if (request.getParameter("page") != null && Integer.valueOf(request.getParameter("page")) > totalNbrPage){
 			requestPage = totalNbrPage;
 			session.setAttribute("page", totalNbrPage);
 		} else if(request.getParameter("page") != null && Integer.valueOf(request.getParameter("page")) < 0){
 			requestPage = 0;
 			session.setAttribute("page", 1);
+		} else if (request.getParameter("page") != null && session.getAttribute("page") != null) {
+			requestPage = Integer.valueOf(request.getParameter("page"));
+			session.setAttribute("page", requestPage);
 		} else {
+			// Initialize pagination
 			requestPage = 0;
 			session.setAttribute("page", 1);
 		}
 
+		// Param Limit SQL
 		if( requestPage == 0) {
 			limitEnd = limitStart + nbrTransactionPerPage;
 		} else {
 			limitStart = (requestPage * nbrTransactionPerPage) - nbrTransactionPerPage;
 			limitEnd = nbrTransactionPerPage;
 		}
+		
 		logger.info("Limit {},{}", limitStart, limitEnd);
 		map.addAttribute("nbrPages", totalNbrPage);
 		map.addAttribute("listTransacDTO", transactionService.historyTransaction(me.getId(),limitStart,limitEnd));
