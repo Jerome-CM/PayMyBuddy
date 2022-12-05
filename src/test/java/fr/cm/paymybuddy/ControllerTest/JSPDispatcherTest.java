@@ -1,4 +1,4 @@
-package fr.cm.paymybuddy;
+package fr.cm.paymybuddy.ControllerTest;
 
 import fr.cm.paymybuddy.Controller.JSPDispatcher;
 import fr.cm.paymybuddy.Service.Interface.OtherServiceInt;
