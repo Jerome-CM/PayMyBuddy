@@ -36,35 +36,37 @@ public class AccessService implements AccessServiceInt {
 
 		logger.info("Data from login - Mail : {} Password : {}", mail, mdp );
 
-		try{
-			if(this.isUserExist((mail))){
 
-				HttpSession session = request.getSession();
-				session.setAttribute("mail", mail);
-				logger.info("User connected - Mail : {} ", mail );
-				return new RedirectView("/transfert");
-			} else {
-				if (mdp.isEmpty()) {
-					return new RedirectView("/login?status=errorPassEmpty");
-				} else if (mail.isEmpty()) {
-					return new RedirectView("/login?status=errorMailEmpty");
-				}else {
+		if(this.isUserExist((mail))){
 
-					User user = new User();
-					user.setMail(mail);
-					user.setPassword(passwordEncoder.encode(mdp));
+			HttpSession session = request.getSession();
+			session.setAttribute("mail", mail);
+			logger.info("User connected - Mail : {} ", mail );
+			return new RedirectView("/transfert");
+		} else {
+			if (mdp.isEmpty()) {
+				return new RedirectView("/login?status=errorPassEmpty");
+			} else if (mail.isEmpty()) {
+				return new RedirectView("/login?status=errorMailEmpty");
+			}else {
 
+				User user = new User();
+				user.setMail(mail);
+				user.setPassword(passwordEncoder.encode(mdp));
+
+				try{
 					user = userRepository.save(user);
 					logger.info("New User create {}", user);
 					HttpSession session = request.getSession();
 					session.setAttribute("mail", mail);
 
 					return new RedirectView("/register");
+
+				}  catch(Exception e){
+					logger.error("Impossible to save a new user : {}", e.getMessage());
+					return new RedirectView("/login?error=reload");
 				}
-            }
-		} catch(Exception e){
-			logger.error("Impossible to save a new user : {}", e.getMessage());
-			return new RedirectView("/login?error=reload");
+			}
 		}
     }
 
