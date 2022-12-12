@@ -35,43 +35,7 @@ public class RelationService implements RelationServiceInt {
         this.modelMapper=modelMapper;
     }
 
-    @Override
-    public RedirectView register(HttpServletRequest request) {
-        logger.info("--- Method register ---");
 
-        String firstname = request.getParameter("firstname");
-        String lastname = request.getParameter("lastname");
-        String mail = request.getParameter("mail");
-
-        if(!firstname.isEmpty() && !lastname.isEmpty()){
-
-            logger.info("Complete registration - firstname : {} lastname : {} for mail : {}", firstname, lastname, mail );
-
-            User user = userRepository.findByMail(mail);
-            logger.info("User infos before registration : {}", user);
-            if(!user.getPassword().isEmpty()){
-
-                user.setFirstname(firstname);
-                user.setLastname(lastname);
-                user.setDateModification(new Date());
-                user.setId(user.getId());
-
-                try{
-                    userRepository.save(user);
-                    logger.info("User infos update : {}", user);
-                    return new RedirectView("/transfert?status=successRegister");
-                } catch(Exception e){
-                    logger.error("Impossible to register the news informations : {}", e.getMessage());
-                    return new RedirectView("/register?status=errorUpdateUser");
-                }
-            } else {
-                logger.error("User not finded for update");
-                return new RedirectView("/login?status=errorFindedUser");
-            }
-        } else {
-            return new RedirectView("/register?status=errorInputEmpty");
-        }
-    }
 
     @Override
     public RedirectView modifyUserInfos(HttpServletRequest request) {

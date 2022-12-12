@@ -5,6 +5,7 @@ import fr.cm.paymybuddy.Model.Transaction;
 import fr.cm.paymybuddy.Model.User;
 import fr.cm.paymybuddy.Repository.TransactionRepository;
 import fr.cm.paymybuddy.Repository.UserRepository;
+import fr.cm.paymybuddy.Service.Interface.AccessServiceInt;
 import fr.cm.paymybuddy.Service.Interface.RelationServiceInt;
 import fr.cm.paymybuddy.Service.Interface.TransactionServiceInt;
 import org.junit.jupiter.api.BeforeEach;
@@ -49,6 +50,9 @@ public class RelationServiceTest {
     @Autowired
     RelationServiceInt relationService;
 
+    @Autowired
+    AccessServiceInt accessService;
+
     private User me;
     private User myFriend;
 
@@ -67,7 +71,7 @@ public class RelationServiceTest {
         when(mockRequest.getParameter("lastname")).thenReturn("Doe");
 
         String oldLastname = me.getLastname();
-        RedirectView url = relationService.register(mockRequest);
+        RedirectView url = accessService.register(mockRequest);
 
         me = userRepository.findByMail("me@paymybuddy.com");
 

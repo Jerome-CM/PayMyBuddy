@@ -64,11 +64,11 @@ public class JSPDispatcherTest {
     @Test
     public void getHomePageTest(){
         HttpServletRequest mockRequest = mock(HttpServletRequest.class);
-        when(otherService.accessPath(any(String.class))).thenReturn(Collections.singletonList("Home"));
+        when(otherService.accessPath(any(String.class))).thenReturn(Collections.singletonList("/"));
 
-        String jspName = jspDispatcher.getHome(mockRequest, map);
+        String jspName = jspDispatcher.getHome(mockRequest, map, mockRequest.getUserPrincipal());
 
-        assertEquals("", "home", jspName);
+        assertEquals("", "/", jspName);
     }
 
     @Test

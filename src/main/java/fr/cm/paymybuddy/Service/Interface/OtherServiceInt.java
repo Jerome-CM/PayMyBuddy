@@ -10,4 +10,6 @@ public interface OtherServiceInt {
     public List<String> accessPath(String url);
 
     public RedirectView sendContactMessage(HttpServletRequest request);
+
+    public RedirectView accesDenied(HttpServletRequest request);
 }

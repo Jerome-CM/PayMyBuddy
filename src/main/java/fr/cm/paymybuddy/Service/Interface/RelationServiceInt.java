@@ -10,7 +10,7 @@ import java.util.List;
 
 public interface RelationServiceInt {
 
-    public RedirectView register(HttpServletRequest request);
+
 
     public RedirectView modifyUserInfos(HttpServletRequest request);
 

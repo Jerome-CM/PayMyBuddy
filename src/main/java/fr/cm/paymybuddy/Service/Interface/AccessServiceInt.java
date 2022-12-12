@@ -6,7 +6,9 @@ import org.springframework.web.servlet.view.RedirectView;
 
 public interface AccessServiceInt {
 
-    public RedirectView login(HttpServletRequest request);
+    public RedirectView register(HttpServletRequest request);
+
+    //public RedirectView login(HttpServletRequest request);
 
     public RedirectView logout(HttpServletRequest request);
 

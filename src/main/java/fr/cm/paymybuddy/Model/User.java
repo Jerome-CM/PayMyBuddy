@@ -24,7 +24,7 @@ public class User extends Model{
     private String mail;
     private String password;
 
-    private String role="user";
+    private String role="USER";
 
     @Column(name="account_balance")
     private double accountBalance = 0.00;

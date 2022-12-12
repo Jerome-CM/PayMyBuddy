@@ -1,83 +1,66 @@
 package fr.cm.paymybuddy.Config.Security;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
-import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+
 
 @Configuration
 @EnableWebSecurity
 public class SpringSecurityConfig {
-	
-	@Autowired
-	UserDetailsService userDetailsService;
-	 
-	@Autowired
-	PasswordEncoder passwordEncoder;	  
+private static final Logger logger = LogManager.getLogger(SpringSecurityConfig.class);
 
- 	@Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.authorizeHttpRequests((authz) -> {
-			try {
-				authz
-				// autorise l'url si on a le bon rôle
-		    		.antMatchers("/admin/**").hasRole("ADMIN")
-					//.antMatchers("/transfert").hasRole("USER")
-				// toutes les requêtes http doivent être authentifiées
-					.anyRequest().authenticated()
-					.and()
-				// Demande une page de formulaire, en précisant laquelle
-					.formLogin().loginPage("/login")//.defaultSuccessUrl("/transfert").failureUrl("/login?error=true")
-					.loginProcessingUrl("/loginFormControl").permitAll() // Trop de redirection sans permitAll = bug de localhost
-					.usernameParameter("mail")
-					.passwordParameter("password")
-					.and().rememberMe();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
-        );
-        http.authenticationProvider(authenticationProvider());
-        return http.build();
-    }
+	UserDetailsServiceImpl userDetailsService;
 
- 	// ignore l'authentification sur ces Urls
- 	@Bean
- 	  public WebSecurityCustomizer webSecurityCustomizer() {
- 	    return (web) -> web.ignoring().antMatchers(
-				 "/loginFormControl",
-				 "/home",
-				 "/contact",
-				 "/CSS/**",
-				 "/**" /*,
-				 "/admin/**"*/
-		);
- 	  }
- 	
- 	// Exploite un UserDetailsService(DAO) afin de rechercher le nom d'utilisateur, le mot de passe et l'adresse GrantedAuthoritys
- 	@Bean
- 	  public DaoAuthenticationProvider authenticationProvider() {
- 		
- 	      DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
- 	       
- 	      authProvider.setUserDetailsService(userDetailsService);
- 	      authProvider.setPasswordEncoder(passwordEncoder);
- 	   
- 	      return authProvider;
- 	  }
- 	
- 	// Renvoie l'objet AuthenticationManager avec les droits accordés ( ou non ) 
- 	@Bean
- 	  public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfiguration) throws Exception {
- 	    return authConfiguration.getAuthenticationManager();
- 	  }
-	
+	@Bean
+	public SecurityFilterChain filterChain (HttpSecurity http) throws Exception {
+		return http.authorizeHttpRequests()
+
+				.antMatchers("/register").permitAll()
+				.antMatchers("/login").permitAll()
+				.antMatchers("/").permitAll()
+				.antMatchers("/contact").permitAll()
+				.antMatchers("/contact").permitAll()
+				.antMatchers("/admin/**").hasRole("ADMIN")
+				.antMatchers("/accessDenied").permitAll()
+				.antMatchers("/CSS/**").permitAll()
+				.anyRequest().authenticated()
+				.and()
+				.formLogin().loginPage("/login")
+				.usernameParameter("mail")
+				.and()
+				.rememberMe()
+				.and()
+				.logout()
+				.logoutSuccessUrl("/login?status=disconnected")
+				.invalidateHttpSession(true)
+				.deleteCookies("remember-me")
+				//.and()
+				//.exceptionHandling().accessDeniedPage("/accessDenied")
+				.and()
+				.csrf().disable()
+				.build();
+	}
+
+	@Bean
+	public BCryptPasswordEncoder passwordEncoder() {
+		return new BCryptPasswordEncoder();
+	}
+
+	@Bean
+	public AuthenticationManager authenticationManager() {
+		DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
+		provider.setPasswordEncoder(passwordEncoder());
+		provider.setUserDetailsService(userDetailsService);
+		return new ProviderManager(provider);
+	}
 }
+

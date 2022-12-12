@@ -43,7 +43,7 @@
 		    	<tr>
 		            <td><c:out value="${transac.friendFirstname}"/></td>
 		            <td><c:out value="${transac.description}"/></td>
-		            <td><c:out value="${transac.amount}"/>€</td>
+		            <td><c:out value="${transac.amount}€"/></td>
 		        </tr>
 			</c:forEach>
 		    </tbody>
