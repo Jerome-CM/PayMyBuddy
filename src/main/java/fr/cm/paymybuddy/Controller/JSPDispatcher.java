@@ -13,8 +13,11 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
+
+import javax.annotation.security.RolesAllowed;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.security.Principal;
 import java.util.List;
 
 @Controller
@@ -35,7 +38,6 @@ public class JSPDispatcher {
 		this.relationService = relationService;
 		this.otherService = otherService;
 	}
-
 	@GetMapping("/login")
 	public String getLogin(HttpServletRequest request, ModelMap map) {
 		HttpSession session = request.getSession();
@@ -59,23 +61,31 @@ public class JSPDispatcher {
 		if(request.getParameter("status") != null) {
 			String statusType = request.getParameter("status");
 
-			if (statusType.equals("errorUpdateUser")) {
-				session.setAttribute("notification", "Update yours informations is impossible");
+			if (statusType.equals("errorNewUser")) {
+				session.setAttribute("notification", "Save yours informations is impossible");
 			} else if (statusType.equals("errorInputEmpty")){
 				session.setAttribute("notification", "Please complete all fields");
-			}
+			} else if (statusType.equals("errorExistMail")){
+			session.setAttribute("notification", "This mail exist already");
+		}
 		}
 		return "register";
 	}
 
 
-	@GetMapping("/home")
-	public String getHome(HttpServletRequest request, ModelMap map) {
-
-		List<String> accessPath = otherService.accessPath((String)request.getRequestURI());
-		map.addAttribute("accessPath", accessPath);
+	@GetMapping("/")
+	public String getHome(HttpServletRequest request, ModelMap map, Principal principal) {
 
 		HttpSession session = request.getSession();
+		if(session.getAttribute("mail") == null && principal != null){
+			String mail = principal.getName();
+			logger.info("Take this mail in session : {}", mail);
+			session.setAttribute("mail", mail);
+		}
+
+		List<String> accessPath = otherService.accessPath(request.getRequestURI());
+		map.addAttribute("accessPath", accessPath);
+
 		if(request.getParameter("status") != null) {
 			String statusType = request.getParameter("status");
 

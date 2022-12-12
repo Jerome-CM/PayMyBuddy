@@ -18,11 +18,6 @@ public class InfosAndRelation {
         this.relationService = relationService;
     }
 
-    @PostMapping("/completeInfosUser")
-    public RedirectView registerUser(HttpServletRequest request){
-        return relationService.register(request);
-    }
-
     @PostMapping("/modifyingUserInfos")
     public RedirectView modifyingUserInfos(HttpServletRequest request){
         return relationService.modifyUserInfos(request);

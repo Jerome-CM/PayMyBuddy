@@ -17,9 +17,9 @@ public class Connexion {
         this.accesService = accesService;
     }
 
-    @PostMapping("/loginFormControl")
-    public RedirectView loginUser(HttpServletRequest request){
-       return accesService.login(request);
+    @PostMapping("/registerUser")
+    public RedirectView registerUser(HttpServletRequest request){
+        return accesService.register(request);
     }
 
     @GetMapping("/logout")

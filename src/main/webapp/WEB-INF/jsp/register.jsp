@@ -13,10 +13,11 @@
 				<h2>My informations</h2>
 			</div>
 			<div class="control_money">
-				<form method="POST" action="/completeInfosUser" class="container_money">
+				<form method="POST" action="/registerUser" class="container_money">
 					<input type="text" name="firstname" placeholder="Firstname">
 					<input type="text" name="lastname" placeholder="Lastname">
-					<input type="hidden" name="mail" value="${sessionScope.mail}">
+					<input type="email" name="mail" placeholder="E-mail">
+					<input type="password" name="password" placeholder="Password">
 					<input type="submit" value="Save" name="submit_infos" class="btn btn_pay">
 				</form>
 			</div>

@@ -7,10 +7,10 @@
 	    
 		    <h1 class="h1_form">Pay My Buddy</h1>
 			<c:out value="${!empty sessionScope.error ? sessionScope.error : ''}"/>
-		    <form action="/loginFormControl" method="post" class="form-login">
+		    <form action="/login" method="post" class="form-login">
 		    	<input type="email" name="mail" placeholder="Identifiant" value="bouteveillejerome@hotmail.fr">
-		    	<input type="password" name="password" placeholder="Mot de passe" value="b">
-		    	<p class="remember"><input type="checkbox" name="remember"> Remember me</p>
+		    	<input type="password" name="password" placeholder="Mot de passe" value="adminPass">
+		    	<p class="remember"><input type="checkbox" name="remember-me"> Remember me</p>
 		    	<input type="submit" value="Login" name="submit" class="submit btn">
 		    </form>
 	    </div><%@ include file="../include/footer.jsp" %>
