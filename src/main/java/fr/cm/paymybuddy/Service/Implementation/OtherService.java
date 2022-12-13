@@ -1,17 +1,15 @@
 package fr.cm.paymybuddy.Service.Implementation;
 
-import fr.cm.paymybuddy.Model.User;
+
 import fr.cm.paymybuddy.Service.Interface.OtherServiceInt;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.view.RedirectView;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
-
 @Service
 public class OtherService implements OtherServiceInt {
 

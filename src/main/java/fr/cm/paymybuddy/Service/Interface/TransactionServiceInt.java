@@ -1,10 +1,7 @@
 package fr.cm.paymybuddy.Service.Interface;
 
 import fr.cm.paymybuddy.DTO.TransactionDTO;
-import fr.cm.paymybuddy.DTO.TransfertDTO;
-import fr.cm.paymybuddy.DTO.UserDTO;
 import org.springframework.web.servlet.view.RedirectView;
-
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 

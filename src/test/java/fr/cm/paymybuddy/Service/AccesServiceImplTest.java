@@ -43,21 +43,24 @@ public class AccesServiceImplTest {
     User user;
 
     @Test
-    public void newUser(){
+    public void register(){
 
         HttpServletRequest mockRequest = mock(HttpServletRequest.class);
-        when(mockRequest.getParameter("mail")).thenReturn("tests@test.com");
+        when(mockRequest.getParameter("firstname")).thenReturn("John");
+        when(mockRequest.getParameter("lastname")).thenReturn("Doe");
+        when(mockRequest.getParameter("mail")).thenReturn("test@test.com");
         when(mockRequest.getParameter("password")).thenReturn("passWord");
-        // when(mockRequest.getSession());
-        // when(mockRequest.setAttribute("mail", "test@test.com"));
 
-        RedirectView url = accessService.login(mockRequest);
+
+        RedirectView url = accessService.register(mockRequest);
         System.out.println(url);
         User userFinded = userRepository.findByMail("test@test.com");
 
+        assertEquals("", "John", userFinded.getFirstname());
+        assertEquals("", "Doe", userFinded.getLastname());
         assertEquals("", "test@test.com", userFinded.getMail());
+        assertEquals("", "USER", userFinded.getRole());
         assertNotEquals("","passWord", userFinded.getPassword());
-
 
     }
 

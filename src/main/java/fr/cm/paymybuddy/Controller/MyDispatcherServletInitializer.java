@@ -7,7 +7,6 @@ public class MyDispatcherServletInitializer extends AbstractAnnotationConfigDisp
 
 	@Override
 	protected Class<?>[] getRootConfigClasses() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 

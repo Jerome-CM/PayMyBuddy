@@ -8,11 +8,8 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.view.RedirectView;
-
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.util.Date;
 
 
 @Service
@@ -55,8 +52,6 @@ public class AccessService implements AccessServiceInt {
 				try{
 					userRepository.save(user);
 					logger.info("New User create {}", user);
-					HttpSession session = request.getSession();
-					session.setAttribute("mail", mail);
 					return new RedirectView("/transfert?status=successRegister");
 				} catch(Exception e){
 					logger.error("Impossible to register the new user : {}", e.getMessage());

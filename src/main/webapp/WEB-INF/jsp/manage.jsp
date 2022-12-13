@@ -24,14 +24,14 @@
 	<section class="money">
 		<div class="header_money">
 			<h2>Money Exchange in app</h2>
-			<p><c:out value="${totalMoney}"/>€</p>
+			<p><c:out value="${totalMoney}"/>&euro;</p>
 		</div>
 	</section>
 
 	<section class="money">
 		<div class="header_money">
 			<h2>Money in wallet</h2>
-			<p><c:out value="${moneyInWallet}"/>€</p>
+			<p><c:out value="${moneyInWallet}"/>&euro;</p>
 		</div>
 	</section>
 

@@ -225,10 +225,16 @@ public class RelationService implements RelationServiceInt {
 
         User me = userRepository.findByMail(user.getMail());
 
-        ProfilDTO profileDTO = new ProfilDTO();
-        profileDTO = modelMapper.map(me, ProfilDTO.class);
+        try{
+            ProfilDTO profileDTO = new ProfilDTO();
+            profileDTO = modelMapper.map(me, ProfilDTO.class);
 
-        logger.info("ProfileDTO : {}", profileDTO);
-        return profileDTO;
+            logger.info("ProfileDTO : {}", profileDTO);
+            return profileDTO;
+        } catch (Exception e){
+            logger.info("User not found {}", user.getMail() + " - " + e.getMessage());
+            return null;
+        }
+
     }
 }

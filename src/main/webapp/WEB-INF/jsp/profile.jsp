@@ -14,6 +14,7 @@
 					<input type="text" name="lastname" placeholder="Lastname" value="<c:out value="${user.lastname}"/>">
 					<input type="text" name="mail" placeholder="Mail" value="<c:out value="${user.mail}"/>">
 					<input type="hidden" name="mail_hidden" value="${sessionScope.mail}">
+                    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 					<input type="submit" value="Save" name="submit_infos" class="btn btn_pay">
 				</form>
 			</div>
@@ -28,6 +29,7 @@
 					<input type="text" name="password" placeholder="New password">
 					<input type="text" name="confirmPassword" placeholder="Confirm your new password">
 					<input type="hidden" name="mail_hidden" value="${sessionScope.mail}">
+					<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 					<input type="submit" value="Change" name="submit_password" class="btn btn_pay">
 				</form>
 			</div>
@@ -44,13 +46,14 @@
 					+
 				</c:if>
 				<c:out value="${user.accountBalance}"/>
-			€</p>
+				&euro;</p>
 				<form method="POST" action="/refundMyAccount" class="control_add_money">
 				<div class="content_input_money">
 					<input type="text" name="amount" placeholder="Amount">
 					<input type="text" name="description" placeholder="Description">
 					<input type="hidden" name="mail_hidden" value="${sessionScope.mail}">
 				</div>
+					<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 					<input type="submit" value="Add money" name="submit_refund" class="btn btn_pay">
 				</form>
 			</div>

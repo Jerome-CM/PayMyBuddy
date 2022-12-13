@@ -11,7 +11,6 @@ import javax.validation.constraints.NotNull;
 @Table(name="Transactions")
 public class Transaction extends Model{
 
-
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private long id;
@@ -20,18 +19,25 @@ public class Transaction extends Model{
     private double amount;
 
     @NotNull
-    private String description;
+    @Column(columnDefinition = "varchar(255) default 'New Transaction'")
+    private String description = "New Transaction";
 
     @JoinColumn(name = "user", nullable = false)
-    @ManyToOne @ToString.Exclude
+    @ManyToOne
+    @ToString.Exclude
     private User user;
 
-    @ManyToOne @ToString.Exclude @NotNull
+    @ManyToOne
+    @ToString.Exclude
+    @NotNull
     private User userFriend;
 
-    @Column(name="type_transaction") @NotNull
+    @Column(name="type_transaction")
+    @Enumerated(EnumType.STRING)
+    @NotNull
     private TypeTransaction typeTransaction;
     @NotNull
+    @Enumerated(EnumType.STRING)
     private TypeStatus status;
     @NotNull
     @Column(name="sold_before_transaction")
@@ -39,7 +45,5 @@ public class Transaction extends Model{
     @NotNull
     @Column(name="sold_after_transaction")
     private double soldAfterTransaction;
-
-
 
 }

@@ -18,6 +18,7 @@
 					<input type="text" name="lastname" placeholder="Lastname">
 					<input type="email" name="mail" placeholder="E-mail">
 					<input type="password" name="password" placeholder="Password">
+					<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 					<input type="submit" value="Save" name="submit_infos" class="btn btn_pay">
 				</form>
 			</div>

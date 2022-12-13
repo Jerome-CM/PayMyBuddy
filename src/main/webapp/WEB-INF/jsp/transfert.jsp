@@ -23,6 +23,7 @@
 					<input type="number" name="amount" value="0">
 					<input type="text" name="description" placeholder="Description">
 					<input type="hidden" name="mail_hidden" value="${sessionScope.mail}">
+					<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 					<input type="submit" value="Pay" name="submit" class="btn btn_pay">
 				</form>
 			</div>
@@ -43,7 +44,7 @@
 		    	<tr>
 		            <td><c:out value="${transac.friendFirstname}"/></td>
 		            <td><c:out value="${transac.description}"/></td>
-		            <td><c:out value="${transac.amount}€"/></td>
+		            <td><c:out value="${transac.amount}"/>&euro;</td>
 		        </tr>
 			</c:forEach>
 		    </tbody>

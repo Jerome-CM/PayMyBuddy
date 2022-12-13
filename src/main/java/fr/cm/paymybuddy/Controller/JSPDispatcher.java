@@ -13,8 +13,6 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
-
-import javax.annotation.security.RolesAllowed;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.security.Principal;
@@ -76,16 +74,10 @@ public class JSPDispatcher {
 	@GetMapping("/")
 	public String getHome(HttpServletRequest request, ModelMap map, Principal principal) {
 
-		HttpSession session = request.getSession();
-		if(session.getAttribute("mail") == null && principal != null){
-			String mail = principal.getName();
-			logger.info("Take this mail in session : {}", mail);
-			session.setAttribute("mail", mail);
-		}
-
 		List<String> accessPath = otherService.accessPath(request.getRequestURI());
 		map.addAttribute("accessPath", accessPath);
 
+		HttpSession session = request.getSession();
 		if(request.getParameter("status") != null) {
 			String statusType = request.getParameter("status");
 

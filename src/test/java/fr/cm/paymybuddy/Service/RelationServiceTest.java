@@ -62,27 +62,8 @@ public class RelationServiceTest {
         myFriend = userRepository.findByMail("profile@paymybuddy.com");
 
     }
+
     @Test
-    public void registerTest(){
-
-        HttpServletRequest mockRequest = mock(HttpServletRequest.class);
-        when(mockRequest.getParameter("mail")).thenReturn("me@paymybuddy.com");
-        when(mockRequest.getParameter("firstname")).thenReturn("John");
-        when(mockRequest.getParameter("lastname")).thenReturn("Doe");
-
-        String oldLastname = me.getLastname();
-        RedirectView url = accessService.register(mockRequest);
-
-        me = userRepository.findByMail("me@paymybuddy.com");
-
-        assertEquals("", null, oldLastname);
-        assertEquals("","John", me.getFirstname());
-        assertEquals("","Doe", me.getLastname());
-        assertNotNull("", me.getDateModification());
-        assertEquals("", "/transfert?status=successRegister", url.getUrl());
-    }
-
-   /* @Test
     public void modifyUserInfosTest(){
 
         HttpServletRequest mockRequest = mock(HttpServletRequest.class);
@@ -95,6 +76,8 @@ public class RelationServiceTest {
         RedirectView url = relationService.modifyUserInfos(mockRequest);
         User userNewInfo = userRepository.findByMail("manage@paymybuddy.com");
 
+
+
         assertEquals("", null, userOldInfo.getFirstname());
         assertEquals("","Johny", userNewInfo.getFirstname());
         assertEquals("", null, userOldInfo.getLastname());
@@ -103,7 +86,7 @@ public class RelationServiceTest {
         assertEquals("","manage@paymybuddy.com", userNewInfo.getMail());
         assertNotEquals(userOldInfo.getDateModification(), userNewInfo.getDateModification());
         assertEquals("", "/profile?status=successModifInfos",url.getUrl());
-    }*/
+    }
 
     @Test
     public void modifyUserPasswordTest(){
@@ -125,7 +108,7 @@ public class RelationServiceTest {
     }
 
     // TODO Soucis de Lazy
-    /*
+
     @Test
     public void addFriendTest(){
         HttpServletRequest mockRequest = mock(HttpServletRequest.class);
@@ -146,7 +129,7 @@ public class RelationServiceTest {
         assertEquals("", "/addFriend?status=success", url.getUrl());
 
     }
-
+/*
     @Test
     public void deleteFriendTest(){
         HttpServletRequest mockRequest = mock(HttpServletRequest.class);

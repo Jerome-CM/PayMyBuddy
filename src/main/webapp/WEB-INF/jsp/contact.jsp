@@ -16,6 +16,7 @@
 						<input type="text" name="lastname" placeholder="Lastname">
 						<input type="text" name="mail" placeholder="Mail">
 						<textarea name="message" placeholder="Votre message ici"></textarea>
+						<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 						<input type="submit" value="Send" name="submit" class="btn btn_pay">
 					</div>
 				</form>

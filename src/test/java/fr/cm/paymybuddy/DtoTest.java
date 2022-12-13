@@ -60,23 +60,22 @@ public class DtoTest {
 
     @Test
     public void simpleEqualsContract() {
-        User me = userRepository.findByMail("me@paymybuddy.com");
-        User friend = userRepository.findByMail("profile@paymybuddy.com");
+        User me = userRepository.findByMail("contact@paymybuddy.com");
+        User friend = userRepository.findByMail("home@paymybuddy.com");
 
         assertEquals("",me == friend, me.equals(friend));
     }
 
     @Test
-    public void transactionDTOTest() {
+    public void transactionDTOTest(){
 
         List<TransactionDTO> transacDtoList = transactionService.historyTransaction(1,0,3);
-      /*  TransactionDTO transactionDTO = transacDtoList.get(2);
+        TransactionDTO transactionDTO = transacDtoList.get(2);
 
         assertEquals("", "Adrien", transactionDTO.getFriendFirstname());
         assertEquals("", "Present", transactionDTO.getDescription());
         assertEquals("", 30.0, transactionDTO.getAmount());
 
-*/
     }
     // getListOfMyFriends
     // historyTransaction

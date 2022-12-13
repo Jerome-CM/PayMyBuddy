@@ -4,14 +4,18 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.DefaultRedirectStrategy;
+import org.springframework.security.web.RedirectStrategy;
 import org.springframework.security.web.SecurityFilterChain;
 
+import javax.servlet.http.HttpSession;
 
 @Configuration
 @EnableWebSecurity
@@ -25,17 +29,28 @@ private static final Logger logger = LogManager.getLogger(SpringSecurityConfig.c
 		return http.authorizeHttpRequests()
 
 				.antMatchers("/register").permitAll()
+				.antMatchers(HttpMethod.POST,"/registerUser").permitAll()
 				.antMatchers("/login").permitAll()
 				.antMatchers("/").permitAll()
 				.antMatchers("/contact").permitAll()
 				.antMatchers("/contact").permitAll()
-				.antMatchers("/admin/**").hasRole("ADMIN")
+				.antMatchers("/admin/").hasAuthority("ADMIN")
 				.antMatchers("/accessDenied").permitAll()
 				.antMatchers("/CSS/**").permitAll()
 				.anyRequest().authenticated()
 				.and()
 				.formLogin().loginPage("/login")
 				.usernameParameter("mail")
+				.successHandler((request, response, authentication) -> {
+					HttpSession session = request.getSession();
+					RedirectStrategy redirectStrategy = new DefaultRedirectStrategy();
+					if(session.getAttribute("mail") == null){
+						String mail = authentication.getName();
+						logger.info("Handler Auth mail : {}", mail);
+						session.setAttribute("mail", mail);
+					}
+					redirectStrategy.sendRedirect(request, response, "/");
+				})
 				.and()
 				.rememberMe()
 				.and()
@@ -43,10 +58,7 @@ private static final Logger logger = LogManager.getLogger(SpringSecurityConfig.c
 				.logoutSuccessUrl("/login?status=disconnected")
 				.invalidateHttpSession(true)
 				.deleteCookies("remember-me")
-				//.and()
-				//.exceptionHandling().accessDeniedPage("/accessDenied")
 				.and()
-				.csrf().disable()
 				.build();
 	}
 

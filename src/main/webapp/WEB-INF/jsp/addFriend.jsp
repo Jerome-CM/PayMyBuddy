@@ -17,6 +17,7 @@
 						</c:forEach>
 					</select>
 					<input type="hidden" name="mail_hidden" value="${sessionScope.mail}">
+					<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 					<input type="submit" value="Add" name="submit" class="btn btn_pay">
 				</form>
 			</div>

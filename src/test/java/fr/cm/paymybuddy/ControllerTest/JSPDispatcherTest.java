@@ -11,16 +11,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Profile;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.SessionAttributes;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import java.net.URL;
 import java.util.Collections;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.util.AssertionErrors.assertEquals;
 
 @Profile("test")
@@ -65,6 +66,7 @@ public class JSPDispatcherTest {
     public void getHomePageTest(){
         HttpServletRequest mockRequest = mock(HttpServletRequest.class);
         when(otherService.accessPath(any(String.class))).thenReturn(Collections.singletonList("/"));
+        // TODO Mock Session
 
         String jspName = jspDispatcher.getHome(mockRequest, map, mockRequest.getUserPrincipal());
 

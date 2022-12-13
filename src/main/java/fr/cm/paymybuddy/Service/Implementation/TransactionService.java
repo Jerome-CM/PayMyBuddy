@@ -125,7 +125,7 @@ public class TransactionService implements TransactionServiceInt {
             t.setDescription(description);
             t.setUser(me);
             t.setUserFriend(friend);
-            t.setTypeTransaction(TypeTransaction.Transfert);
+            t.setTypeTransaction(TypeTransaction.Transfer);
             t.setStatus(TypeStatus.Waiting);
             t.setSoldBeforeTransaction(me.getAccountBalance());
             t.setSoldAfterTransaction(me.getAccountBalance() - amount);
