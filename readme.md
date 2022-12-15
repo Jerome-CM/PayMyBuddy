@@ -40,5 +40,13 @@ In application.properties file, located in : src/main/resources
 The different endpoints is documented with swagger at this address after run start the application : http://localhost:8080/swagger-ui/
 
 # Move your money with your buddy now !
+
+## Diagram of classes
+
+![Diagram of classes](https://github.com/Jerome-CM/PayMyBuddy/blob/develop/uml.png?raw=true)
+
+## Model of data
+
+![Model of data](https://github.com/Jerome-CM/PayMyBuddy/blob/develop/mpd.png?raw=true)
 >  Note  
 >  This project is an exercise of OpenClassRooms Java training
