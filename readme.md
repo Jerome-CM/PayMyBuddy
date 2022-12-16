@@ -39,6 +39,8 @@ In application.properties file, located in : src/main/resources
 
 The different endpoints is documented with swagger at this address after run start the application : http://localhost:8080/swagger-ui/
 
+> :warning: Login is required
+
 # Move your money with your buddy now !
 
 ## Diagram of classes
