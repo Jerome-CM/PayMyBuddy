@@ -14,6 +14,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import java.net.URL;
@@ -65,12 +66,13 @@ public class JSPDispatcherTest {
     @Test
     public void getHomePageTest(){
         HttpServletRequest mockRequest = mock(HttpServletRequest.class);
-        when(otherService.accessPath(any(String.class))).thenReturn(Collections.singletonList("/"));
-        // TODO Mock Session
+        //HttpServletResponse mockResponse = mock(HttpServletResponse.class);
+        when(mockRequest.getRequestURI()).thenReturn("/");
+        //when(otherService.accessPath(any(String.class))).thenReturn(Collections.singletonList("/"));
 
-        String jspName = jspDispatcher.getHome(mockRequest, map, mockRequest.getUserPrincipal());
+        String jspName = jspDispatcher.getHome(mockRequest, map);
 
-        assertEquals("", "/", jspName);
+        assertEquals("", "home", jspName);
     }
 
     @Test

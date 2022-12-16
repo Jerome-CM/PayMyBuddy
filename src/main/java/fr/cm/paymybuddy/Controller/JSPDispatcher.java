@@ -72,7 +72,7 @@ public class JSPDispatcher {
 
 
 	@GetMapping("/")
-	public String getHome(HttpServletRequest request, ModelMap map, Principal principal) {
+	public String getHome(HttpServletRequest request, ModelMap map) {
 
 		List<String> accessPath = otherService.accessPath(request.getRequestURI());
 		map.addAttribute("accessPath", accessPath);

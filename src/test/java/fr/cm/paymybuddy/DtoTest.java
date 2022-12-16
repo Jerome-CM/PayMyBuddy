@@ -55,7 +55,7 @@ public class DtoTest {
         assertEquals("", "profile@paymybuddy.com", profileControl.getMail());
         assertEquals("", "Adrien", profileControl.getFirstname());
         assertEquals("", "Vier", profileControl.getLastname());
-        assertEquals("", 20.0, profileControl.getAccountBalance());
+        assertEquals("", 80.0, profileControl.getAccountBalance());
     }
 
     @Test
@@ -70,7 +70,7 @@ public class DtoTest {
     public void transactionDTOTest(){
 
         List<TransactionDTO> transacDtoList = transactionService.historyTransaction(1,0,3);
-        TransactionDTO transactionDTO = transacDtoList.get(2);
+        TransactionDTO transactionDTO = transacDtoList.get(0);
 
         assertEquals("", "Adrien", transactionDTO.getFriendFirstname());
         assertEquals("", "Present", transactionDTO.getDescription());
