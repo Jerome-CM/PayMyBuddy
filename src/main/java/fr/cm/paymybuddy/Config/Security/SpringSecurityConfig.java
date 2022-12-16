@@ -52,6 +52,8 @@ private static final Logger logger = LogManager.getLogger(SpringSecurityConfig.c
 					redirectStrategy.sendRedirect(request, response, "/");
 				})
 				.and()
+				.exceptionHandling().accessDeniedPage("/403")
+				.and()
 				.rememberMe()
 				.and()
 				.logout()

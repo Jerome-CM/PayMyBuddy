@@ -83,6 +83,8 @@ public class JSPDispatcher {
 
 			if (statusType.equals("disconnected")) {
 				session.setAttribute("notification", "You are logout");
+			} else if (statusType.equals("errorForbidden")){
+				session.setAttribute("notification", "You don't have a permission");
 			}
 		}
 
@@ -265,6 +267,12 @@ public class JSPDispatcher {
 		map.addAttribute("moneyInWallet", totalWallet);
 
 		return "manage";
+	}
+
+	@GetMapping("/403")
+	public String getAccessDenied() {
+
+		return "accessForbidden";
 	}
 
 }
