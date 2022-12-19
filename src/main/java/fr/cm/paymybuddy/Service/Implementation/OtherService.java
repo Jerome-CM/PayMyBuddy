@@ -15,17 +15,24 @@ public class OtherService implements OtherServiceInt {
 
     private static final Logger logger = LogManager.getLogger(OtherService.class);
 
+    /**
+     * Create a breadcrumb trail
+     * @param url
+     * @return an array content words and /
+     */
     public List<String> accessPath(String url){
 
-        // Split the words and add upperCase for the first char of each word
+        // Target : Split the words and add upperCase for the first char of each word
         String[] words = url.split("/");
 
         List<String> UpOneCaseToTheWords = new ArrayList<>();
         List<String> arrayConstruct = new ArrayList<>();
+
         if(url.equals("/")){
+            /* Add directly a word in a good format if the url is juste '/' */
             UpOneCaseToTheWords.add("Home");
         } else {
-
+            /* For each word, take the first char and put upperCase this.  */
             for(int i=1; i< words.length; i++){
 
                 char[] word = words[i].toCharArray();
@@ -47,6 +54,7 @@ public class OtherService implements OtherServiceInt {
             arrayConstruct.add("/");
         }
 
+        /* Add / between each word */
         for(String string : UpOneCaseToTheWords){
             arrayConstruct.add(string);
             arrayConstruct.add("/");
@@ -68,7 +76,7 @@ public class OtherService implements OtherServiceInt {
 
     @Override
     public RedirectView sendContactMessage(HttpServletRequest request) {
-
+        /* Simulated to send a contact message */
         return new RedirectView("/contact?status=sentMessage");
     }
 }

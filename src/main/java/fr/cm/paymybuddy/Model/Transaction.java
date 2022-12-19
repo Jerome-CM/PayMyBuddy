@@ -24,20 +24,20 @@ public class Transaction extends Model{
 
     @JoinColumn(name = "user", nullable = false)
     @ManyToOne
-    @ToString.Exclude
+    @ToString.Exclude //Generate an implementation of the toString()
     private User user;
 
     @ManyToOne
-    @ToString.Exclude
+    @ToString.Exclude //Generate an implementation of the toString()
     @NotNull
     private User userFriend;
 
     @Column(name="type_transaction")
-    @Enumerated(EnumType.STRING)
+    @Enumerated(EnumType.STRING) // Write String, not enum index
     @NotNull
     private TypeTransaction typeTransaction;
     @NotNull
-    @Enumerated(EnumType.STRING)
+    @Enumerated(EnumType.STRING)// Write String, not enum index
     private TypeStatus status;
     @NotNull
     @Column(name="sold_before_transaction")

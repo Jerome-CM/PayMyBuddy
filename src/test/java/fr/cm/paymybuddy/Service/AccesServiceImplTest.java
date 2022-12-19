@@ -54,13 +54,13 @@ public class AccesServiceImplTest {
 
         RedirectView url = accessService.register(mockRequest);
         System.out.println(url);
-        User userFinded = userRepository.findByMail("test@test.com");
+        User userfound = userRepository.findByMail("test@test.com");
 
-        assertEquals("", "John", userFinded.getFirstname());
-        assertEquals("", "Doe", userFinded.getLastname());
-        assertEquals("", "test@test.com", userFinded.getMail());
-        assertEquals("", "USER", userFinded.getRole());
-        assertNotEquals("","passWord", userFinded.getPassword());
+        assertEquals("", "John", userfound.getFirstname());
+        assertEquals("", "Doe", userfound.getLastname());
+        assertEquals("", "test@test.com", userfound.getMail());
+        assertEquals("", "USER", userfound.getRole());
+        assertNotEquals("","passWord", userfound.getPassword());
 
     }
 

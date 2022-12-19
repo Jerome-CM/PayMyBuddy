@@ -15,7 +15,6 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.security.Principal;
 import java.util.List;
 
 @Controller
@@ -41,13 +40,15 @@ public class JSPDispatcher {
 		HttpSession session = request.getSession();
 		if(request.getParameter("status") != null) {
 			String statusType = request.getParameter("status");
-
+			/* Display error message on the page with session status */
 			if (statusType.equals("errorPassEmpty")) {
 				session.setAttribute("notification", "Your password is empty");
 			} else if (statusType.equals("errorMailEmpty")) {
 				session.setAttribute("notification", "Your mail is empty");
-			} else if (statusType.equals("errorFindedUser")) {
-				session.setAttribute("notification", "Sorry, you don't have finded, please login first");
+			} else if (statusType.equals("errorfoundUser")) {
+				session.setAttribute("notification", "Sorry, you don't have found, please login first");
+			} else if (statusType.equals("disconnected")) {
+				session.setAttribute("notification", "You have been logout with success");
 			}
 		}
 		return "login";
@@ -58,7 +59,7 @@ public class JSPDispatcher {
 		HttpSession session = request.getSession();
 		if(request.getParameter("status") != null) {
 			String statusType = request.getParameter("status");
-
+			/* Display error message on the page with session status */
 			if (statusType.equals("errorNewUser")) {
 				session.setAttribute("notification", "Save yours informations is impossible");
 			} else if (statusType.equals("errorInputEmpty")){
@@ -73,34 +74,23 @@ public class JSPDispatcher {
 
 	@GetMapping("/")
 	public String getHome(HttpServletRequest request, ModelMap map) {
-
+		/* Display on the screen the breadcrumb trail */ 
 		List<String> accessPath = otherService.accessPath(request.getRequestURI());
 		map.addAttribute("accessPath", accessPath);
-
-		HttpSession session = request.getSession();
-		if(request.getParameter("status") != null) {
-			String statusType = request.getParameter("status");
-
-			if (statusType.equals("disconnected")) {
-				session.setAttribute("notification", "You are logout");
-			} else if (statusType.equals("errorForbidden")){
-				session.setAttribute("notification", "You don't have a permission");
-			}
-		}
 
 		return "home";
 	}
 
 	@GetMapping("/transfert")
 	public String getTransfert(HttpServletRequest request, ModelMap map) {
-
+		/* Display on the screen the breadcrumb trail */
 		List<String> accessPath = otherService.accessPath((String)request.getRequestURI());
 		map.addAttribute("accessPath", accessPath);
 
 		HttpSession session = request.getSession();
 		if(request.getParameter("status") != null) {
 			String statusType = request.getParameter("status");
-
+			/* Display error message on the page with session status */
 			if (statusType.equals("errorChooseEmpty")) {
 				session.setAttribute("notification", "You don't have choose a friend");
 			}  else if (statusType.equals("errorLittleAmount")) {
@@ -121,21 +111,21 @@ public class JSPDispatcher {
 
 
 		// Pagination config
-		int nbrTransactionPerPage = 3;
+		int nbrTransactionPerPage = 3; // Never 0 !
 		int limitStart = 0;
 		int limitEnd;
 		int totalNbrPage = (int)Math.ceil(transactionRepository.findAllByUserId(me.getId()).size() / nbrTransactionPerPage);
-		Integer requestPage = 0;
+		int requestPage = 0;
 
 		// Exceptions
-		if (request.getParameter("page") != null && Integer.valueOf(request.getParameter("page")) > totalNbrPage){
+		if (request.getParameter("page") != null && Integer.parseInt(request.getParameter("page")) > totalNbrPage){
 			requestPage = totalNbrPage;
 			session.setAttribute("page", totalNbrPage);
-		} else if(request.getParameter("page") != null && Integer.valueOf(request.getParameter("page")) < 0){
+		} else if(request.getParameter("page") != null && Integer.parseInt(request.getParameter("page")) < 0){
 			requestPage = 0;
 			session.setAttribute("page", 1);
 		} else if (request.getParameter("page") != null && session.getAttribute("page") != null) {
-			requestPage = Integer.valueOf(request.getParameter("page"));
+			requestPage = Integer.parseInt(request.getParameter("page"));
 			session.setAttribute("page", requestPage);
 		} else {
 			// Initialize pagination
@@ -164,7 +154,7 @@ public class JSPDispatcher {
 
 		if(request.getParameter("status") != null) {
 			String statusType = request.getParameter("status");
-
+			/* Display error message on the page with session status */
 			if (statusType.equals("errorUpdateInformations")) {
 				session.setAttribute("notification", "Update yours informations is impossible");
 			} else if (statusType.equals("errorSaveNewPassword")) {
@@ -184,11 +174,11 @@ public class JSPDispatcher {
 			}
 		}
 
-
+		/* Display on the screen the breadcrumb trail */
 		List<String> accessPath = otherService.accessPath((String)request.getRequestURI());
 		map.addAttribute("accessPath", accessPath);
 
-
+		/* Get user infos */
 		User me = userRepository.findByMail((String) session.getAttribute( "mail" ));
 		map.addAttribute("user", relationService.getProfileDTO(me));
 
@@ -197,7 +187,7 @@ public class JSPDispatcher {
 
 	@GetMapping("/addFriend")
 	public String getAddFriend(HttpServletRequest request, ModelMap map) {
-
+		/* Display on the screen the breadcrumb trail */
 		List<String> accessPath = otherService.accessPath((String)request.getRequestURI());
 		map.addAttribute("accessPath", accessPath);
 
@@ -205,7 +195,7 @@ public class JSPDispatcher {
 
 		if(request.getParameter("status") != null) {
 			String statusType = request.getParameter("status");
-
+			/* Display error message on the page with session status */
 			if (statusType.equals("errorChooseEmpty")) {
 				session.setAttribute("notification", "You don't have choose a friend");
 			} else if (statusType.equals("errorAlreadyFriend")) {
@@ -224,14 +214,14 @@ public class JSPDispatcher {
 
 	@GetMapping("/contact")
 	public String getContact(HttpServletRequest request, ModelMap map) {
-
+		/* Display on the screen the breadcrumb trail */
 		List<String> accessPath = otherService.accessPath((String)request.getRequestURI());
 		map.addAttribute("accessPath", accessPath);
 
 		HttpSession session = request.getSession();
 		if(request.getParameter("status") != null) {
 			String statusType = request.getParameter("status");
-
+			/* Display error message on the page with session status */
 			if (statusType.equals("sentMessage")) {
 				session.setAttribute("notification", "Your message as been send");
 			}}
@@ -241,22 +231,26 @@ public class JSPDispatcher {
 
 	@GetMapping("/admin/manage")
 	public String getManage(HttpServletRequest request, ModelMap map) {
-
+		/* Display on the screen the breadcrumb trail */
 		List<String> accessPath = otherService.accessPath((String)request.getRequestURI());
 		map.addAttribute("accessPath", accessPath);
 
+		/* Count all users */
 		List<User> userList = (List<User>) userRepository.findAll();
+		/* Count all transactions */
 		List<Transaction> transacList = (List<Transaction>) transactionRepository.findAll();
 
 		double totalMoney = 0;
 		double totalWallet = 0;
 
+		/* Count all money sent with the app */
 		for(Transaction transa : transacList){
 			if(!transa.getUser().equals(transa.getUserFriend())){
 				totalMoney += transa.getAmount();
 			}
 		}
 
+		/* Count all money in the wallets of app */
 		for(User user : userList){
 			totalWallet += user.getAccountBalance();
 		}

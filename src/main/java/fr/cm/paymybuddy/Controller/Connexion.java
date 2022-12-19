@@ -20,10 +20,10 @@ public class Connexion {
         return accesService.register(request);
     }
 
-    @GetMapping("/logout")
+   /* @GetMapping("/logout")
     public  RedirectView logoutUser(HttpServletRequest request){
         return accesService.logout(request);
-    }
+    }*/
 
 
 }

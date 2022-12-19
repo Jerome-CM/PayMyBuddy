@@ -1,7 +1,6 @@
 package fr.cm.paymybuddy.Controller;
 
 import fr.cm.paymybuddy.Service.Interface.OtherServiceInt;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -24,7 +23,7 @@ public class Other {
     }
 
     @GetMapping("/accessDenied")
-    public RedirectView accesDenied(HttpServletRequest request){
+    public RedirectView accessDenied(HttpServletRequest request){
         return otherService.accesDenied(request);
     }
 }

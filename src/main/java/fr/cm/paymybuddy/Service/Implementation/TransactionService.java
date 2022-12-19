@@ -35,6 +35,11 @@ public class TransactionService implements TransactionServiceInt {
         this.modelMapper=modelMapper;
     }
 
+    /**
+     *
+     * @param request
+     * @return
+     */
     @Override
     @Transactional
     public RedirectView refundAccount(HttpServletRequest request) {
@@ -46,7 +51,8 @@ public class TransactionService implements TransactionServiceInt {
         String mail = request.getParameter("mail_hidden");
 
         logger.info("Refund request : {}€ {} {}", amount, description, mail);
-        // table Users
+
+        /* Started modify the information in the Users table */
         User user = userRepository.findByMail(mail);
         double userBalanceBefore = user.getAccountBalance();
 
@@ -56,6 +62,7 @@ public class TransactionService implements TransactionServiceInt {
         logger.info("Balance Account previous after refund : ''{}''", userBalanceAfter);
 
         try {
+            /* Refresh a new account balance */
             userRepository.updateAccountBalance(userBalanceAfter, mail);
             logger.info("Account Balance update, Balance Account : {}", userBalanceAfter);
         } catch (Exception e) {
@@ -63,11 +70,12 @@ public class TransactionService implements TransactionServiceInt {
             return new RedirectView("/profile?status=errorRefund");
         }
 
-        // Table Transactions
+        /* Started add the information in the Transactions table */
 
         List<Transaction> listTransac = user.getTransactions();
         logger.info("Transaction list : {}", listTransac);
 
+        /* Set a new transaction with the transfer information */
         Transaction t = new Transaction();
         t.setAmount(amount);
         t.setDescription(description);
@@ -80,12 +88,14 @@ public class TransactionService implements TransactionServiceInt {
 
         logger.info("Object Transaction ready to be save : {}", t);
 
+        /* Added the transaction in the list of transaction of the User */
         listTransac.add(t);
         user.setTransactions(listTransac);
         logger.info("All infos users ready to be save : {}", user);
 
 
         try {
+            /* Save a new records in the DB */
             userRepository.save(user);
             transactionRepository.save(t);
             logger.info("Transaction save in BDD, user balance updated ");
@@ -97,6 +107,11 @@ public class TransactionService implements TransactionServiceInt {
 
     }
 
+    /**
+     *
+     * @param request
+     * @return
+     */
     @Override
     @Transactional
     public RedirectView sendMoney(HttpServletRequest request) {
@@ -110,6 +125,7 @@ public class TransactionService implements TransactionServiceInt {
 
         logger.info("Refund request : {}€ {} {}", amount, description, mailFriend);
 
+        /* Found error */
         if(mailFriend.equals("choose")) {
             logger.info("errorChooseEmpty");
             return new RedirectView("/transfert?status=errorChooseEmpty");
@@ -118,8 +134,9 @@ public class TransactionService implements TransactionServiceInt {
             return new RedirectView("/transfert?status=errorLittleAmount");
         } else if(haveIEnoughMoney(me.getMail(),amount)){
             List<Transaction> listTransac = me.getTransactions();
-
             User friend = userRepository.findByMail(mailFriend);
+
+            /* Set a new transaction with the transfer information */
             Transaction t = new Transaction();
             t.setAmount(amount);
             t.setDescription(description);
@@ -134,6 +151,7 @@ public class TransactionService implements TransactionServiceInt {
             listTransac.add(t);
             me.setTransactions(listTransac);
 
+            /* Update the account balance for me and the friend */
             me.setAccountBalance(me.getAccountBalance() - amount);
             friend.setAccountBalance(friend.getAccountBalance() + amount);
 
@@ -153,6 +171,12 @@ public class TransactionService implements TransactionServiceInt {
         }
     }
 
+    /**
+     *
+     * @param mail my email
+     * @param amount amount to the transfer
+     * @return Boolean
+     */
     @Override
     public boolean haveIEnoughMoney(String mail, double amount) {
 
@@ -167,6 +191,13 @@ public class TransactionService implements TransactionServiceInt {
         }
     }
 
+    /**
+     *
+     * @param id id_user
+     * @param limitStart
+     * @param limitEnd
+     * @return a list of Transaction for use with LIMIT SQL
+     */
     @Override
     public List<TransactionDTO> historyTransaction(long id, int limitStart, int limitEnd) {
 
@@ -174,7 +205,7 @@ public class TransactionService implements TransactionServiceInt {
 
         List<Transaction> listTransac = transactionRepository.findByIdUser(id, limitStart, limitEnd);
 
-        // logger.info("Transactions list finded : {}", listTransac);
+        // logger.info("Transactions list found : {}", listTransac);
         List<TransactionDTO> listDTO = new ArrayList<>();
         for ( Transaction transaction: listTransac) {
             TransactionDTO tDTO = modelMapper.map(transaction, TransactionDTO.class);

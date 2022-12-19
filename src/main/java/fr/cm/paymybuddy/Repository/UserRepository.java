@@ -17,7 +17,7 @@ public interface UserRepository extends CrudRepository <User,Long> {
     @Query(value="SELECT * FROM users JOIN users_friends ON users_friends.friends_id = users.id WHERE user_id = ?1 ORDER BY firstname ASC", nativeQuery = true)
     public List<User> getMyFriends(long id);
 
-    @Transactional
+    @Transactional // Rollback and Commit
     @Modifying
     @Query(value ="UPDATE users SET account_balance=?1 WHERE mail=?2", nativeQuery = true)
     public void updateAccountBalance(double amount, String mail);

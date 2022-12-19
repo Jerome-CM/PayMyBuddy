@@ -13,6 +13,7 @@
 				<a class="btn" href="/addFriend">Add Connection</a>
 			</div>
 			<div class="control_money">
+				<%--form for sent the money--%>
 				<form method="POST" action="/sendMoney" class="container_money command_send_money">
 					<select name="mailFriend">
 						<option value="">Choose a connection</option>

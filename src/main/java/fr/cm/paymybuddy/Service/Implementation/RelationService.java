@@ -36,7 +36,11 @@ public class RelationService implements RelationServiceInt {
     }
 
 
-
+    /**
+     *
+     * @param request
+     * @return a jsp with a status message
+     */
     @Override
     public RedirectView modifyUserInfos(HttpServletRequest request) {
 
@@ -47,11 +51,13 @@ public class RelationService implements RelationServiceInt {
         String mail = request.getParameter("mail");
         String mailHidden = request.getParameter("mail_hidden");
 
-        logger.info("Modif infos request - firstname : {} lastname : {} new mail : {}, old mail : {}", firstname, lastname, mail, mailHidden );
+        logger.info("Modify infos request - firstname : {} lastname : {} new mail : {}, old mail : {}", firstname, lastname, mail, mailHidden );
 
+        /* Find user with the old email address */
         User user = userRepository.findByMail(mailHidden);
         logger.info("Old values of user {}", user);
 
+        /* Set the new values */
         user.setFirstname(firstname);
         user.setLastname(lastname);
         user.setMail(mail);
@@ -61,6 +67,7 @@ public class RelationService implements RelationServiceInt {
             userRepository.save(user);
             logger.info("User infos update : {}", user);
             if(!mail.equals(mailHidden)){
+                /* If the mail at changed, we insert in the session the new mail */
                 HttpSession session = request.getSession();
                 session.setAttribute("mail", mail);
             }
@@ -73,6 +80,11 @@ public class RelationService implements RelationServiceInt {
         }
     }
 
+    /**
+     *
+     * @param request
+     * @return a jsp with a status message
+     */
     @Override
     public RedirectView modifyUserPassword(HttpServletRequest request) {
 
@@ -101,10 +113,15 @@ public class RelationService implements RelationServiceInt {
 
     }
 
+    /**
+     *
+     * @param request
+     * @return a jsp with a status message
+     */
     @Override
     public RedirectView addFriend(HttpServletRequest request) {
 
-        logger.info("--- Method addFriend ---");
+    logger.info("--- Method addFriend ---");
 
     String mailFriend = request.getParameter("mail");
     String myMail = request.getParameter("mail_hidden");
@@ -119,11 +136,13 @@ public class RelationService implements RelationServiceInt {
             User userFriend = userRepository.findByMail(mailFriend);
             User me = userRepository.findByMail(myMail);
 
-            logger.info("Friend finded with {} : {}", mailFriend, userFriend);
+            logger.info("Friend found with {} : {}", mailFriend, userFriend);
 
+            /* Get my friend list and add my new friend in this one */
             List<User> myFriends = me.getFriends();
             myFriends.add(userFriend);
 
+            /* Set the friends list in a User object and save this one */
             me.setFriends(myFriends);
             try {
                 userRepository.save(me);
@@ -137,6 +156,11 @@ public class RelationService implements RelationServiceInt {
         return new RedirectView("/addFriend?status=error");
     }
 
+    /**
+     *
+     * @param request
+     * @return a jsp with a status message
+     */
     @Override
     public RedirectView deleteFriend(HttpServletRequest request) {
 
@@ -148,6 +172,7 @@ public class RelationService implements RelationServiceInt {
         List<User> myFriendList = userRepository.getMyFriends(me.getId());
 
         List<User> myNewFriendList = new ArrayList<>();
+        /* Take an old friends list and add the friend to it. if the email to be deleted matches, do not add it to the new list */
         for(User user : myFriendList){
             if(!user.getMail().equals(mailToDelete)){
                 myNewFriendList.add(user);
@@ -166,6 +191,12 @@ public class RelationService implements RelationServiceInt {
 
     }
 
+    /**
+     *
+     * @param myMail
+     * @param mailFriend
+     * @return boolean
+     */
     @Override
     public boolean isItMyFriend(String myMail, String mailFriend){
 
@@ -174,7 +205,7 @@ public class RelationService implements RelationServiceInt {
         logger.info("Mail friend {}", mailFriend);
 
         List<User> myfriends = userRepository.getMyFriends(userRepository.findByMail(myMail).getId());
-        logger.info("My friends finded : {}", myfriends);
+        logger.info("My friends found : {}", myfriends);
 
         for(User user : myfriends){
             if(user.getMail().equals(mailFriend)){
@@ -184,6 +215,12 @@ public class RelationService implements RelationServiceInt {
         return false;
     }
 
+    /**
+     *
+     * @param mail
+     * @return My friend list DTO
+     */
+    @Override
     public List<FriendDTO> getListOfMyFriends(String mail){
 
         logger.info("--- Method getListOfMyFriends ---");
@@ -201,6 +238,12 @@ public class RelationService implements RelationServiceInt {
         return listFriendsDTO;
     }
 
+    /**
+     *
+     * @param myMail - String
+     * @return List of all user DTO without my mail
+     */
+    @Override
     public List<FriendDTO> getAllUserWithoutMe(String myMail){
 
         logger.info("--- Method getAllUserWithoutMe ---");
@@ -219,6 +262,12 @@ public class RelationService implements RelationServiceInt {
         return listUsersDTO;
     }
 
+    /**
+     *
+     * @param user - User object
+     * @return My profil DTO
+     */
+    @Override
     public ProfilDTO getProfileDTO(User user){
 
         logger.info("--- Method getProfileDTO ---");

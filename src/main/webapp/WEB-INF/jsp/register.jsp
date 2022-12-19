@@ -6,7 +6,7 @@
     <%@ include file="../include/menu.jsp" %>
     
     <br>
-    <p style="text-align:center;">Welcome, you are a new user in Pay My Buddy application, please complete your profile for start experience</p>
+    <p class="center">Welcome, you are a new user in Pay My Buddy application, please complete your profile for start experience</p>
 
 	<section class="money">
 			<div>

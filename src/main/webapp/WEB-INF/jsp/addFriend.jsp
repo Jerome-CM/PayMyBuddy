@@ -12,6 +12,7 @@
 				<form method="POST" action="/addFriend" class="container_choose_friend">
 					<select name="mail">
 						<option value="choose">Choose a user</option>
+						<%--User list without me--%>
 						<c:forEach items="${ listUsers }" var="user">
 							<option value="<c:out value="${user.mail}"/>"> <c:out value="${user.firstname} ${user.lastname} - ${user.mail}"/></option>
 						</c:forEach>

@@ -8,7 +8,7 @@ import javax.persistence.MappedSuperclass;
 import java.util.Date;
 
 @Data
-@MappedSuperclass
+@MappedSuperclass // To create date columns on DB creation by JPA
 public abstract class Model {
 
     @Column(name="date_creation", nullable = false, updatable = false)

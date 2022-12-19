@@ -26,10 +26,15 @@ public class AccessService implements AccessServiceInt {
 		this.passwordEncoder=passwordEncoder;
 	}
 
+	/**
+	 * Create a new user in DB
+	 * @param request
+	 * @return
+	 */
 	@Override
 	public RedirectView register(HttpServletRequest request) {
 		logger.info("--- Method register ---");
-
+		/* Get parameter from register jsp */
 		String firstname = request.getParameter("firstname");
 		String lastname = request.getParameter("lastname");
 		String mail = request.getParameter("mail");
@@ -38,10 +43,11 @@ public class AccessService implements AccessServiceInt {
 		if(!firstname.isEmpty() && !lastname.isEmpty() && !mail.isEmpty() && !password.isEmpty()){
 
 			logger.info("Complete registration - firstname : {} lastname : {} for mail : {}", firstname, lastname, mail );
-
+			/* Find user with mail in the request */
 			User userFind = userRepository.findByMail(mail);
 			logger.info("User infos before registration : {}", userFind);
 			if(userFind == null){
+				/* Create a user if not exist */
 				User user = new User();
 
 				user.setFirstname(firstname);
@@ -50,6 +56,7 @@ public class AccessService implements AccessServiceInt {
 				user.setPassword(passwordEncoder.encode(password));
 
 				try{
+					/* Insert it in DB  */
 					userRepository.save(user);
 					logger.info("New User create {}", user);
 					return new RedirectView("/transfert?status=successRegister");
@@ -65,76 +72,12 @@ public class AccessService implements AccessServiceInt {
 			return new RedirectView("/register?status=errorInputEmpty");
 		}
 	}
-	/*
 
-    @Override
-    public RedirectView login(HttpServletRequest request) {
-
-		logger.info("--- Method login ---");
-
-		String mail = request.getParameter("mail");
-		String mdp = request.getParameter("password");
-
-		logger.info("Data from login - Mail : {} Password : {}", mail, mdp );
-
-
-		if(this.isUserExist((mail))){
-
-			HttpSession session = request.getSession();
-			session.setAttribute("mail", mail);
-			logger.info("User connected - Mail : {} ", mail );
-			return new RedirectView("/transfert");
-		} else {
-			if (mdp.isEmpty()) {
-				return new RedirectView("/login?status=errorPassEmpty");
-			} else if (mail.isEmpty()) {
-				return new RedirectView("/login?status=errorMailEmpty");
-			}else {
-
-				User user = new User();
-				user.setMail(mail);
-				user.setPassword(passwordEncoder.encode(mdp));
-
-				try{
-					user = userRepository.save(user);
-					logger.info("New User create {}", user);
-					HttpSession session = request.getSession();
-					session.setAttribute("mail", mail);
-
-					return new RedirectView("/register");
-
-				}  catch(Exception e){
-					logger.error("Impossible to save a new user : {}", e.getMessage());
-					return new RedirectView("/login?error=reload");
-				}
-			}
-		}
-    }
-
-*/
-
-    @Override
-    public RedirectView logout(HttpServletRequest request) {
-
-		logger.info("--- Method logout ---");
-
-		HttpSession session = request.getSession();
-		User user = userRepository.findByMail((String)session.getAttribute("mail"));
-		session.invalidate();
-		/*Cookie[] cookies = request.getCookies();
-		String nameCookie = "remember-me";
-		if ( cookies != null ) {
-			for ( Cookie cookie : cookies ) {
-				if ( cookie != null && nameCookie.equals( cookie.getName() ) ) {
-					cookie.setMaxAge(0);
-				}
-			}
-		}
-        */
-		logger.info("User disconnected - {}", user.getMail());
-		return new RedirectView("/?status=disconnected");
-    }
-
+	/**
+	 * Verifying if the mail exist in the DB
+	 * @param mail
+	 * @return boolean
+	 */
 	public boolean isUserExist(String mail){
 
 		logger.info("--- Method isUserExist ---");
@@ -145,7 +88,7 @@ public class AccessService implements AccessServiceInt {
 			logger.info("User not found during connection request");
 			return false;
 		} else {
-			logger.info("User finded during connection request : {}", user);
+			logger.info("User found during connection request : {}", user);
 			return true;
 		}
 	}

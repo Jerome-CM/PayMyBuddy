@@ -15,7 +15,6 @@ public class Transaction {
     public Transaction(TransactionServiceInt transactionService) {
         this.transactionService = transactionService;
     }
-
     @PostMapping("/refundMyAccount")
     public RedirectView refundAccount(HttpServletRequest request){
         return transactionService.refundAccount(request);

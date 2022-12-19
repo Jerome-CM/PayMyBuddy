@@ -27,20 +27,22 @@ private static final Logger logger = LogManager.getLogger(SpringSecurityConfig.c
 	@Bean
 	public SecurityFilterChain filterChain (HttpSecurity http) throws Exception {
 		return http.authorizeHttpRequests()
-
+				/* Guest access */
 				.antMatchers("/register").permitAll()
 				.antMatchers(HttpMethod.POST,"/registerUser").permitAll()
 				.antMatchers("/login").permitAll()
 				.antMatchers("/").permitAll()
 				.antMatchers("/contact").permitAll()
-				.antMatchers("/admin/**").hasAuthority("ADMIN")
 				.antMatchers("/accessDenied").permitAll()
 				.antMatchers("/CSS/**").permitAll()
 				.antMatchers("/swagger-ui/**").permitAll()
+				/* Access admin only */
+				.antMatchers("/admin/**").hasAuthority("ADMIN")
 				.anyRequest().authenticated()
 				.and()
 				.formLogin().loginPage("/login")
 				.usernameParameter("mail")
+				/*Take the mail in the session after success login*/
 				.successHandler((request, response, authentication) -> {
 					HttpSession session = request.getSession();
 					RedirectStrategy redirectStrategy = new DefaultRedirectStrategy();
@@ -52,6 +54,7 @@ private static final Logger logger = LogManager.getLogger(SpringSecurityConfig.c
 					redirectStrategy.sendRedirect(request, response, "/");
 				})
 				.and()
+				/* Show accessDenied.jsp if access is denied, /403 is a get controller */
 				.exceptionHandling().accessDeniedPage("/403")
 				.and()
 				.rememberMe()
