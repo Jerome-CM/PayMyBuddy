@@ -78,6 +78,14 @@ public class JSPDispatcher {
 		List<String> accessPath = otherService.accessPath(request.getRequestURI());
 		map.addAttribute("accessPath", accessPath);
 
+		HttpSession session = request.getSession();
+		if(request.getParameter("status") != null) {
+			String statusType = request.getParameter("status");
+			/* Display error message on the page with session status */
+			if (statusType.equals("disconnected")) {
+				session.setAttribute("notification", "You have been disconnected");
+			}
+		}
 		return "home";
 	}
 

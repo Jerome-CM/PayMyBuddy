@@ -73,6 +73,18 @@ public class AccessService implements AccessServiceInt {
 		}
 	}
 
+	@Override
+	public RedirectView logout(HttpServletRequest request) {
+
+		logger.info("--- Method logout ---");
+
+		HttpSession session = request.getSession();
+		User user = userRepository.findByMail((String)session.getAttribute("mail"));
+		session.invalidate();
+		logger.info("User disconnected - {}", user.getMail());
+		return new RedirectView("/?status=disconnected");
+	}
+
 	/**
 	 * Verifying if the mail exist in the DB
 	 * @param mail

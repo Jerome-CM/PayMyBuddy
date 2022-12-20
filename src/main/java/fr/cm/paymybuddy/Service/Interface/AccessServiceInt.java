@@ -8,6 +8,8 @@ public interface AccessServiceInt {
 
     public RedirectView register(HttpServletRequest request);
 
+    public RedirectView logout(HttpServletRequest request);
+
     public boolean isUserExist(String mail);
 
 }
