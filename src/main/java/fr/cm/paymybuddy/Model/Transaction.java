@@ -10,7 +10,6 @@ import javax.validation.constraints.NotNull;
 @Data
 @Entity
 @Table(name="Transactions")
-@EqualsAndHashCode(callSuper = true)
 public class Transaction extends Model{
 
     @Id
@@ -26,12 +25,10 @@ public class Transaction extends Model{
 
     @JoinColumn(name = "user", nullable = false)
     @ManyToOne
-    @EqualsAndHashCode.Exclude
     @ToString.Exclude //Generate an implementation of the toString()
     private User user;
 
     @ManyToOne
-    @EqualsAndHashCode.Exclude
     @ToString.Exclude //Generate an implementation of the toString()
     @NotNull
     private User userFriend;

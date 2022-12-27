@@ -7,19 +7,14 @@ import fr.cm.paymybuddy.Model.User;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Profile;
-import org.springframework.test.context.jdbc.Sql;
 
 import java.util.Date;
 
-import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.AFTER_TEST_METHOD;
-import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.BEFORE_TEST_METHOD;
 import static org.springframework.test.util.AssertionErrors.assertEquals;
 import static org.springframework.test.util.AssertionErrors.assertTrue;
 
 @Profile("test")
 @SpringBootTest
-@Sql(value = "/UsersDataTest.sql",executionPhase = BEFORE_TEST_METHOD)
-@Sql(value = "/truncate.sql",executionPhase = AFTER_TEST_METHOD)
 public class EqualsAndHashCode {
 
     public User setUser(){
