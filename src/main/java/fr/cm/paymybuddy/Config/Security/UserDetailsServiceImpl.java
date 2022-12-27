@@ -1,5 +1,6 @@
 package fr.cm.paymybuddy.Config.Security;
 
+import fr.cm.paymybuddy.Config.Generated;
 import fr.cm.paymybuddy.Model.User;
 import fr.cm.paymybuddy.Repository.UserRepository;
 import org.apache.logging.log4j.LogManager;
@@ -25,7 +26,8 @@ private static final Logger logger = LogManager.getLogger(UserDetailsServiceImpl
      * @return User Spring
      * @throws UsernameNotFoundException
      */
-     @Override
+    @Generated
+    @Override
     public UserDetails loadUserByUsername(String mail) throws UsernameNotFoundException {
 
             User user = userRepository.findByMail(mail);

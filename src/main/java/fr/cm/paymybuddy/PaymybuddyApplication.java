@@ -1,6 +1,7 @@
 package fr.cm.paymybuddy;
 
 // import fr.cm.paymybuddy.Config.Security.UserDetailsServiceImpl;
+import fr.cm.paymybuddy.Config.Generated;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
+@Generated
 @SpringBootApplication
 @EnableSwagger2
 public class PaymybuddyApplication implements CommandLineRunner { 

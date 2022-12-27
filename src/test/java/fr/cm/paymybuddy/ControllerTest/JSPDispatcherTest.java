@@ -1,6 +1,8 @@
 package fr.cm.paymybuddy.ControllerTest;
 
 import fr.cm.paymybuddy.Controller.JSPDispatcher;
+import fr.cm.paymybuddy.Model.User;
+import fr.cm.paymybuddy.Repository.UserRepository;
 import fr.cm.paymybuddy.Service.Interface.OtherServiceInt;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -11,17 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Profile;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.SessionAttributes;
-
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-
-import java.net.URL;
-import java.util.Collections;
-
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.util.AssertionErrors.assertEquals;
 
@@ -36,13 +29,19 @@ public class JSPDispatcherTest {
     HttpServletRequest mockRequest;
     ModelMap map;
 
+    @Autowired
+    UserRepository userRepository;
+
     @Mock
     OtherServiceInt otherService;
 
+    @Mock
+    User user;
+
     @BeforeEach
     public void setUpPerTest(){
-        HttpServletRequest mockRequest = mock(HttpServletRequest.class);
-        ModelMap map = new ModelMap();
+        mockRequest = mock(HttpServletRequest.class);
+        map = new ModelMap();
     }
 
     @Test
@@ -66,9 +65,8 @@ public class JSPDispatcherTest {
     @Test
     public void getHomePageTest(){
         HttpServletRequest mockRequest = mock(HttpServletRequest.class);
-        //HttpServletResponse mockResponse = mock(HttpServletResponse.class);
         when(mockRequest.getRequestURI()).thenReturn("/");
-        //when(otherService.accessPath(any(String.class))).thenReturn(Collections.singletonList("/"));
+
 
         String jspName = jspDispatcher.getHome(mockRequest, map);
 
@@ -78,10 +76,17 @@ public class JSPDispatcherTest {
     @Test
     public void getTransferPageTest(){
         HttpServletRequest mockRequest = mock(HttpServletRequest.class);
+        HttpSession mockSession = mock(HttpSession.class);
+        when(mockRequest.getRequestURI()).thenReturn("/transfer");
+        mockSession.setAttribute("mail", "me@paymybuddy.com");
+        when(mockRequest.getSession()).thenReturn(mockSession);
+        //when(mockSession.getAttribute("mail")).thenReturn("me@paymybuddy.com");
+        HttpSession session = mockRequest.getSession();
+        System.out.println(session.getAttribute("mail"));
 
-       // String jspName = jspDispatcher.getTransfert(mockRequest, map);
+        String jspName = jspDispatcher.getTransfert(mockRequest, map);
 
-       // assertEquals("", "transfert", jspName);
+        assertEquals("", "transfert", jspName);
     }
 
     @Test

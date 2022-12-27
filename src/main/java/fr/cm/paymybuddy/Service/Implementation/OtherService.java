@@ -28,7 +28,7 @@ public class OtherService implements OtherServiceInt {
         List<String> UpOneCaseToTheWords = new ArrayList<>();
         List<String> arrayConstruct = new ArrayList<>();
 
-        if(url.equals("/")){
+        if(url.equals("/") || url.isEmpty()){
             /* Add directly a word in a good format if the url is juste '/' */
             UpOneCaseToTheWords.add("Home");
         } else {

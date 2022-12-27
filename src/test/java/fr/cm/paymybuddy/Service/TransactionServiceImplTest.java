@@ -67,7 +67,7 @@ public class TransactionServiceImplTest {
         int nbrTransac = transacList.size();
         HttpServletRequest mockRequest = mock(HttpServletRequest.class);
         when(mockRequest.getParameter("mail_hidden")).thenReturn("me@paymybuddy.com");
-        when(mockRequest.getParameter("amount")).thenReturn("50,00");
+        when(mockRequest.getParameter("amount")).thenReturn("50.00");
         when(mockRequest.getParameter("description")).thenReturn("Refund");
         double amount = Utility.stringCommaToDoublePoint(mockRequest.getParameter("amount"));
 
@@ -78,8 +78,8 @@ public class TransactionServiceImplTest {
         assertEquals("",nbrTransac + 1,transacList.size());
       //  assertEquals("", me.getAccountBalance() + amount, userRepository.findByMail("me@paymybuddy.com").getAccountBalance());
 
-        Transaction transaction = transactionRepository.findAllByUserId(1).get(1);
-        assertEquals("",transaction.getUser(), transaction.getUserFriend());
+        Transaction transaction = transactionRepository.findAllByUserId(1).get(0);
+        assertEquals("",transaction.getUser().getMail(), transaction.getUserFriend().getMail());
         assertEquals("",urlExpected, url.getUrl());
     }
 
@@ -91,7 +91,7 @@ public class TransactionServiceImplTest {
         HttpServletRequest mockRequest = mock(HttpServletRequest.class);
         when(mockRequest.getParameter("mailFriend")).thenReturn("profile@paymybuddy.com");
         when(mockRequest.getParameter("mail_hidden")).thenReturn("me@paymybuddy.com");
-        when(mockRequest.getParameter("amount")).thenReturn("50");
+        when(mockRequest.getParameter("amount")).thenReturn("50.00");
         when(mockRequest.getParameter("description")).thenReturn("A big present");
 
         double amount = Utility.stringCommaToDoublePoint(mockRequest.getParameter("amount"));

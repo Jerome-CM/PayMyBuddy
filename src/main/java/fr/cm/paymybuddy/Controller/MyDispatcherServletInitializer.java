@@ -1,8 +1,10 @@
 package fr.cm.paymybuddy.Controller;
 
+import fr.cm.paymybuddy.Config.Generated;
 import fr.cm.paymybuddy.Config.JSPViewResolver;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
+@Generated
 public class MyDispatcherServletInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
 
 	@Override

@@ -71,7 +71,7 @@ public class RelationService implements RelationServiceInt {
                 HttpSession session = request.getSession();
                 session.setAttribute("mail", mail);
             }
-            logger.info("Infos user update : {}", user );
+            logger.info("Mail in session have been change : {}", user );
             return new RedirectView("/profile?status=successModifInfos");
 
         } catch(Exception e){

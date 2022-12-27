@@ -1,6 +1,8 @@
 package fr.cm.paymybuddy.Model;
 
 import lombok.Data;
+import lombok.ToString;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +28,8 @@ public class User extends Model{
     @Column(name="account_balance")
     private double accountBalance = 0.00;
 
-    @ManyToMany
+    @ManyToMany(fetch=FetchType.EAGER)
+    @ToString.Exclude
     List<User> friends = new ArrayList<>();
 
     @OneToMany(mappedBy = "user", fetch=FetchType.LAZY)
