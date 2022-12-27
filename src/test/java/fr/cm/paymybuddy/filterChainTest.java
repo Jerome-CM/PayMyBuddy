@@ -1,27 +1,16 @@
 package fr.cm.paymybuddy;
 
-import fr.cm.paymybuddy.Model.User;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoSettings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Profile;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-
-//@Profile("test")
+@Profile("test")
 @SpringBootTest
 @AutoConfigureMockMvc
 @WithMockUser(username = "me@paymybyddy.com")
@@ -53,13 +42,6 @@ public class filterChainTest {
     public void adminPage() throws Exception {
         mockMvc.perform(get("/admin/manage")).andExpect(status().isForbidden());
     }
-
-    @Test
-    public void userTransferPage() throws Exception {
-
-        mockMvc.perform(get("/transfert")).andExpect(status().isOk());
-    }
-
 
 }
 

@@ -96,6 +96,7 @@ public class JSPDispatcher {
 		map.addAttribute("accessPath", accessPath);
 
 		HttpSession session = request.getSession();
+
 		if(request.getParameter("status") != null) {
 			String statusType = request.getParameter("status");
 			/* Display error message on the page with session status */
@@ -116,7 +117,6 @@ public class JSPDispatcher {
 
 		User me = userRepository.findByMail((String) session.getAttribute( "mail" ));
 		map.addAttribute("userDTO", relationService.getProfileDTO(me));
-
 
 		// Pagination config
 		int nbrTransactionPerPage = 3; // Never 0 !
