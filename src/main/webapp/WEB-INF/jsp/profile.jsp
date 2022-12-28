@@ -49,7 +49,7 @@
 				&euro;</p>
 				<form method="POST" action="/refundMyAccount" class="control_add_money">
 				<div class="content_input_money">
-					<input type="text" name="amount" placeholder="Amount">
+					<input type="text" name="amount" pattern="[0-9]{1,9}" title="1 to 9 numbers, no comma" placeholder="Amount">
 					<input type="text" name="description" placeholder="Description">
 					<input type="hidden" name="mail_hidden" value="${sessionScope.mail}">
 				</div>

@@ -36,16 +36,8 @@ public class Utility {
      */
     public static double stringCommaToDoublePoint(String amount){
 
-        String regex = "[0-9]|[0-9]{1,9}[,.][0-9]{2}";
-        Pattern pattern = Pattern.compile(regex);
-        Matcher matcher = pattern.matcher(amount);
-
-        if(matcher.matches()){
             String point = amount.replace(",", ".");
             return Double.parseDouble(point);
-        } else {
-            logger.info("Illegal value for input {}", amount);
-            throw new ArithmeticException("The regex doesn't match with amount");
-        }
+     
     }
 }
