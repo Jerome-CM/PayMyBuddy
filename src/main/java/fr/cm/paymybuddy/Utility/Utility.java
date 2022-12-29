@@ -38,6 +38,6 @@ public class Utility {
 
             String point = amount.replace(",", ".");
             return Double.parseDouble(point);
-     
+
     }
 }
