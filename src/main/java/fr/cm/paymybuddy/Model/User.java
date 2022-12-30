@@ -16,15 +16,16 @@ public class User extends Model{
     private long id;
 
     private String firstname = "Not set";
+    
     private String lastname = "Not set";
+    
     @Column(unique = true, length = 120)
-
     private String mail;
+    
     private String password;
 
     private String role="USER";
 
-    @Column(name="account_balance")
     private double accountBalance = 0.00;
 
     @ManyToMany(fetch=FetchType.EAGER)
