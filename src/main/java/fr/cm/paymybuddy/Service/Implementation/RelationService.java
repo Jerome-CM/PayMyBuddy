@@ -139,11 +139,11 @@ public class RelationService implements RelationServiceInt {
             logger.info("Friend found with {} : {}", mailFriend, userFriend);
 
             /* Get my friend list and add my new friend in this one */
-            List<User> myFriends = me.getFriends();
+            List<User> myFriends = me.getFriend();
             myFriends.add(userFriend);
 
             /* Set the friends list in a User object and save this one */
-            me.setFriends(myFriends);
+            me.setFriend(myFriends);
             try {
                 userRepository.save(me);
                 logger.info("New friend added");
@@ -179,7 +179,7 @@ public class RelationService implements RelationServiceInt {
             }
         }
 
-        me.setFriends(myNewFriendList);
+        me.setFriend(myNewFriendList);
         try{
             userRepository.save(me);
             logger.info("Friend delete : {}",mailToDelete);
