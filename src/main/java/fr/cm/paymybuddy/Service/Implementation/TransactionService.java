@@ -72,7 +72,7 @@ public class TransactionService implements TransactionServiceInt {
 
         /* Started add the information in the Transactions table */
 
-        List<Transaction> listTransac = user.getTransactions();
+        List<Transaction> listTransac = user.getTransaction();
         logger.info("Transaction list : {}", listTransac);
 
         /* Set a new transaction with the transfer information */
@@ -90,7 +90,7 @@ public class TransactionService implements TransactionServiceInt {
 
         /* Added the transaction in the list of transaction of the User */
         listTransac.add(t);
-        user.setTransactions(listTransac);
+        user.setTransaction(listTransac);
         logger.info("All infos users ready to be save : {}", user);
 
 
@@ -133,7 +133,7 @@ public class TransactionService implements TransactionServiceInt {
             logger.info("errorLittleAmount");
             return new RedirectView("/transfert?status=errorLittleAmount");
         } else if(haveIEnoughMoney(me.getMail(),amount)){
-            List<Transaction> listTransac = me.getTransactions();
+            List<Transaction> listTransac = me.getTransaction();
             User friend = userRepository.findByMail(mailFriend);
 
             /* Set a new transaction with the transfer information */
@@ -149,7 +149,7 @@ public class TransactionService implements TransactionServiceInt {
             logger.info("Object Transaction ready to be save : {}", t);
 
             listTransac.add(t);
-            me.setTransactions(listTransac);
+            me.setTransaction(listTransac);
 
             /* Update the account balance for me and the friend */
             me.setAccountBalance(me.getAccountBalance() - amount);

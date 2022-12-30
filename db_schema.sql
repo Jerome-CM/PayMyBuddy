@@ -15,75 +15,75 @@ CREATE SCHEMA IF NOT EXISTS `paymybuddy` DEFAULT CHARACTER SET utf8 ;
 USE `paymybuddy` ;
 
 -- -----------------------------------------------------
--- Table `paymybuddy`.`Users`
+-- Table `paymybuddy`.`user`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `paymybuddy`.`Users` (
-    `id` INT NOT NULL AUTO_INCREMENT,
-    `firstname` VARCHAR(255) NOT NULL,
-    `lastname` VARCHAR(255) NOT NULL,
-    `mail` VARCHAR(255) NOT NULL,
-    `password` VARCHAR(255) NOT NULL,
-    `account_balance` DOUBLE NOT NULL DEFAULT 0,
-    `date_creation` DATETIME NOT NULL,
-    `date_modification` DATETIME NULL DEFAULT NULL,
-    UNIQUE INDEX `mail_UNIQUE` (`mail` ASC) VISIBLE,
-    PRIMARY KEY (`id`))
-    ENGINE = InnoDB;
+CREATE TABLE IF NOT EXISTS `paymybuddy`.`user` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `firstname` VARCHAR(255) NOT NULL,
+  `lastname` VARCHAR(255) NOT NULL,
+  `mail` VARCHAR(255) NOT NULL,
+  `password` VARCHAR(255) NOT NULL,
+  `account_balance` DOUBLE NOT NULL DEFAULT 0,
+  `date_creation` DATETIME NOT NULL,
+  `date_modification` DATETIME NULL DEFAULT NULL,
+  UNIQUE INDEX `mail_UNIQUE` (`mail` ASC) VISIBLE,
+  PRIMARY KEY (`id`))
+ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `paymybuddy`.`Relations_Users`
+-- Table `paymybuddy`.`user_friend`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `paymybuddy`.`Relations_Users` (
-    `id` INT NOT NULL AUTO_INCREMENT,
-    `id_user` INT NOT NULL,
-    `id_friend` INT NOT NULL,
-    `date_relation` DATETIME NOT NULL,
-    INDEX `FK_Relations_Users_Users1_idx` (`id_user` ASC) VISIBLE,
-    INDEX `FK_Relations_Users_Users2_idx` (`id_friend` ASC) VISIBLE,
-    PRIMARY KEY (`id`),
-    CONSTRAINT `FK_Relations_Users_Users1`
+CREATE TABLE IF NOT EXISTS `paymybuddy`.`user_friend` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `id_user` INT NOT NULL,
+  `id_friend` INT NOT NULL,
+  `date_relation` DATETIME NOT NULL,
+  INDEX `FK_Relations_Users_Users1_idx` (`id_user` ASC) VISIBLE,
+  INDEX `FK_Relations_Users_Users2_idx` (`id_friend` ASC) VISIBLE,
+  PRIMARY KEY (`id`),
+  CONSTRAINT `FK_Relations_Users_Users1`
     FOREIGN KEY (`id_user`)
-    REFERENCES `paymybuddy`.`Users` (`id`)
+    REFERENCES `paymybuddy`.`user` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
-    CONSTRAINT `FK_Relations_Users_Users2`
+  CONSTRAINT `FK_Relations_Users_Users2`
     FOREIGN KEY (`id_friend`)
-    REFERENCES `paymybuddy`.`Users` (`id`)
+    REFERENCES `paymybuddy`.`user` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
-    ENGINE = InnoDB;
+ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `paymybuddy`.`Transactions`
+-- Table `paymybuddy`.`transaction`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `paymybuddy`.`Transactions` (
-    `id` INT NOT NULL AUTO_INCREMENT,
-    `amount` DOUBLE NOT NULL,
-    `description` VARCHAR(255) CHARACTER SET 'DEFAULT' NOT NULL,
-    `id_user` INT NOT NULL,
-    `id_friend` INT NOT NULL,
-    `type_transaction` VARCHAR(255) NOT NULL,
-    `status` VARCHAR(20) NOT NULL,
-    `sold_before_transaction` DOUBLE NOT NULL,
-    `sold_after_transaction` DOUBLE NOT NULL,
-    `date_creation` DATETIME NOT NULL,
-    `date_modification` DATETIME NULL DEFAULT NULL,
-    PRIMARY KEY (`id`),
-    INDEX `FK_Transactions_Users1_idx` (`id_user` ASC) VISIBLE,
-    INDEX `FK_Transactions_Users2_idx` (`id_friend` ASC) VISIBLE,
-    CONSTRAINT `FK_Transactions_Users1`
+CREATE TABLE IF NOT EXISTS `paymybuddy`.`transaction` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `amount` DOUBLE NOT NULL,
+  `description` VARCHAR(255) CHARACTER SET 'DEFAULT' NOT NULL,
+  `id_user` INT NOT NULL,
+  `id_friend` INT NOT NULL,
+  `type_transaction` VARCHAR(255) NOT NULL,
+  `status` VARCHAR(20) NOT NULL,
+  `sold_before_transaction` DOUBLE NOT NULL,
+  `sold_after_transaction` DOUBLE NOT NULL,
+  `date_creation` DATETIME NOT NULL,
+  `date_modification` DATETIME NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  INDEX `FK_Transactions_Users1_idx` (`id_user` ASC) VISIBLE,
+  INDEX `FK_Transactions_Users2_idx` (`id_friend` ASC) VISIBLE,
+  CONSTRAINT `FK_Transactions_Users1`
     FOREIGN KEY (`id_user`)
-    REFERENCES `paymybuddy`.`Users` (`id`)
+    REFERENCES `paymybuddy`.`user` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
-    CONSTRAINT `FK_Transactions_Users2`
+  CONSTRAINT `FK_Transactions_Users2`
     FOREIGN KEY (`id_friend`)
-    REFERENCES `paymybuddy`.`Users` (`id`)
+    REFERENCES `paymybuddy`.`user` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
-    ENGINE = InnoDB;
+ENGINE = InnoDB;
 
 
 SET SQL_MODE=@OLD_SQL_MODE;

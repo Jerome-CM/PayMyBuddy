@@ -9,7 +9,6 @@ import java.util.List;
 
 @Data
 @Entity
-@Table(name="Users")
 public class User extends Model{
 
     @Id
@@ -30,9 +29,9 @@ public class User extends Model{
 
     @ManyToMany(fetch=FetchType.EAGER)
     @ToString.Exclude
-    List<User> friends = new ArrayList<>();
+    List<User> friend = new ArrayList<>();
 
     @OneToMany(mappedBy = "user", fetch=FetchType.LAZY)
-    List<Transaction> transactions = new ArrayList<>();
+    List<Transaction> transaction = new ArrayList<>();
 
 }

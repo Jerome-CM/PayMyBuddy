@@ -14,12 +14,12 @@ public interface UserRepository extends CrudRepository <User,Long> {
 
     public User findByMail(String mail);
 
-    @Query(value="SELECT * FROM users JOIN users_friends ON users_friends.friends_id = users.id WHERE user_id = ?1 ORDER BY firstname ASC", nativeQuery = true)
+    @Query(value="SELECT * FROM user JOIN user_friend ON user_friend.friend_id = user.id WHERE user_id = ?1 ORDER BY firstname ASC", nativeQuery = true)
     public List<User> getMyFriends(long id);
 
     @Transactional // Rollback and Commit
     @Modifying
-    @Query(value ="UPDATE users SET account_balance=?1 WHERE mail=?2", nativeQuery = true)
+    @Query(value ="UPDATE user SET account_balance=?1 WHERE mail=?2", nativeQuery = true)
     public void updateAccountBalance(double amount, String mail);
     
 
